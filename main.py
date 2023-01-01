@@ -7,8 +7,8 @@ from levelClass import Level
 class Game:
     def __init__(self) -> None:
         pg.init()
-        self.screen = pg.display.set_mode((WIDTH,HEIGHT))
-        self.win = pg.Surface((500,400))
+        self.screen = pg.display.set_mode((WIDTH,HEIGHT)) # main display surface
+        self.win = pg.Surface((500,400))   #surface used for image scaling onto main display surface ^
         self.clock = pg.time.Clock()
         pg.display.set_caption("Red4")
 
@@ -24,8 +24,8 @@ class Game:
                     sys.exit()
                 
                 self.screen.fill('black')
-                self.scaled_win = pg.transform.scale(self.win, self.screen.get_size())
-                self.screen.blit(self.scaled_win,(0,0))
+                self.scaled_win = pg.transform.scale(self.win, self.screen.get_size()) #scale images
+                self.screen.blit(self.scaled_win,(0,0)) #blit scaled images to main display surface
                 self.level.run()
                 pg.display.flip()
                 self.clock.tick(FPS)
