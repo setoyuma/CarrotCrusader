@@ -21,7 +21,11 @@ class Game:
         
 
     def run(self): 
-        while True:
+        while True: #game loop
+
+            self.screen.fill("black")
+            
+            #event handler
             for event in pg.event.get():
                 if event.type == KEYDOWN:
                     if event.key == K_q:
@@ -30,7 +34,6 @@ class Game:
                         sys.exit()
                 
                 
-            self.screen.fill("black")
             # self.win.fill("grey")
             # self.scaled_win = pg.transform.scale(self.win, self.screen.get_size()) #scale images
             # self.screen.blit(self.scaled_win,(0,0)) #blit scaled images to main display surface

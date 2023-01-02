@@ -30,8 +30,8 @@ class Level:
         #update and draw the game
         self.drawnSprites.customDraw(self.player)
         self.drawnSprites.update()
-        # self.player.updatePlayer()
-        # debug(self.player.direction)
+        # self.player.update()  #uncomment for fps boost????
+        debug(self.player.direction)
 
 
 
@@ -51,6 +51,7 @@ class YSortCameraGroup(pg.sprite.Group):
         self.offset.x = player.rect.centerx - self.halfWidth
         self.offset.y = player.rect.centery - self.halfHeight
 
-        for sprite in self.sprites():
+        # for sprite in self.sprites():
+        for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):
             offsetPos = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image,offsetPos)
