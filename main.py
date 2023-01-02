@@ -3,7 +3,7 @@ from settings import *
 from mapData import *
 from debug import debug
 from levelClass import Level
-
+ 
 from pygame.locals import *
 
 # from playerClass import Player
@@ -24,7 +24,7 @@ class Game:
         while True: #game loop
 
             self.screen.fill("black")
-            
+
             #event handler
             for event in pg.event.get():
                 if event.type == KEYDOWN:
