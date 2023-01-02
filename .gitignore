@@ -1,0 +1,13 @@
+# dep.txt
+# nb1.ipynb
+# test.py
+# debug.py
+# map.py
+# settings.py
+\imgs
+\gameVenv
+\dev
+\__pycache__
+# \refactored
+# .gitignore
+

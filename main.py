@@ -10,6 +10,7 @@ from pygame.locals import *
 
 class Game:
     def __init__(self) -> None:
+ 
         pg.init()
         self.screen = pg.display.set_mode((WINDOWSIZE)) # main display surface
         # self.win = pg.Surface((500,400))   #surface used for image scaling onto main display surface ^

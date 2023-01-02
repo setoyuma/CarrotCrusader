@@ -16,14 +16,16 @@ class Level:
         self.createMap()
 
     def createMap(self):
-        for rowIndex,row in enumerate(WORLD_MAP):
-            for colIndex,col in enumerate(row):
-                x = colIndex * TILESIZE
-                y = rowIndex * TILESIZE
-                if col == "x":
-                    Tile((x,y),[self.drawnSprites,self.collideSprites])
-                if col == "p":
-                    self.player = Player((x,y),[self.drawnSprites],self.collideSprites)
+    #     for rowIndex,row in enumerate(WORLD_MAP):
+    #         for colIndex,col in enumerate(row):
+    #             x = colIndex * TILESIZE
+    #             y = rowIndex * TILESIZE
+    #             if col == "x":
+    #                 Tile((x,y),[self.drawnSprites,self.collideSprites])
+    #             if col == "p":
+    #                 self.player = Player((x,y),[self.drawnSprites],self.collideSprites)
+        self.player = Player((400,300),[self.drawnSprites],self.collideSprites)
+
 
 
     def run(self):
@@ -46,12 +48,21 @@ class YSortCameraGroup(pg.sprite.Group):
 
         self.offset = pg.math.Vector2() #offset of drawn images
 
+        #create floor
+        self.floorSurface = pg.image.load('./imgs/Tiled/ground.png').convert()
+        self.floorRect = self.floorSurface.get_rect(topleft=(0,0))
+
     def customDraw(self,player):
         #getting offset
         self.offset.x = player.rect.centerx - self.halfWidth
         self.offset.y = player.rect.centery - self.halfHeight
 
+        #draw floor
+        floorOffsetPos = self.floorRect.topleft - self.offset
+        self.displaySurface.blit(self.floorSurface,floorOffsetPos)
+
         # for sprite in self.sprites():
+        #draw elements
         for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):
             offsetPos = sprite.rect.topleft - self.offset
             self.displaySurface.blit(sprite.image,offsetPos)
