@@ -106,35 +106,6 @@ def load_map(path):
 '''MAP INSTANCE'''
 game_map = load_map('../imgs/Tiled/TestMap1.csv')
 
-'''TILE DICTIONARY'''
-GAME_TILES = {
-    'ClassicBlock' : pg.image.load('../imgs/tiles/Classic.png'),
-    'GrassBlock' : pg.image.load('../imgs/tiles/GrassBlock.png'),
-    'IceFloor' : pg.image.load('../imgs/tiles/IceFloor.png'),
-    'IceyBlock' : pg.image.load('../imgs/tiles/IceyBlock.png'),
-    'PillarBlock' : pg.image.load('../imgs/tiles/PillarBlock.png'),
-    'PillarSupport' : pg.image.load('../imgs/tiles/PillarSupportBlock.png'),
-    'ChapelSupport' : pg.image.load('../imgs/tiles/ChapelSupport.png'),
-    'ChapelFloor' : pg.image.load('../imgs/tiles/ChapelFloor.png'),
-    'CastleHallFloorSupport' : pg.image.load('../imgs/tiles/CastleHallFloorSupportBlock.png'),
-    'CastleHallBrickFloor' : pg.image.load('../imgs/tiles/CastleHallBrickFloorBlock.png'),
-    'BrickBlock' : pg.image.load('../imgs/tiles/BrickBlock.png'),
-    'BreakableBlock' : pg.image.load('../imgs/tiles/BreakableBlock.png'),
-    'HauntedPrisonFloor' : pg.image.load('../imgs/tiles/Haunted Prison Floor.png'),
-    'GhostTrainFloor' : pg.image.load('../imgs/tiles/Ghost Train Floor.png'),
-    'MagmaPoolBlock' : pg.image.load('../imgs/tiles/Magma Pool Block.png'),
-    'MasterChamberFloor' : pg.image.load('../imgs/tiles/Master Chamber Floor.png'),
-    'MasterChamberPillarTop' : pg.image.load('../imgs/tiles/Master Chamber Sigil Pillar Top.png'),
-    'MasterChamberPillar' : pg.image.load('../imgs/tiles/Master Chamber Sigil Pillar.png'),
-    'MasterChamberSupport' : pg.image.load('../imgs/tiles/Master Chamber Sigil Support.png'),
-    'DrakeGround' : pg.image.load('../imgs/tiles/Drake Ground Floor.png'),
-    'WonderBlockFloor' : pg.image.load('../imgs/tiles/Wonder Block Floor.png'),
-    'WonderBlockSupport' : pg.image.load('../imgs/tiles/Wonder Block Support.png'),
-    'CastleHallFloorPillar' : pg.image.load('../imgs/tiles/Castle Hall Floor Pillar.png'),
-    'HauntedPrisonSupport' : pg.image.load('../imgs/tiles/Haunted Prison Support.png'),
-}
-
-
 '''PLAYER STATUS VARS'''
 moving_right = False
 moving_left = False
@@ -178,53 +149,53 @@ while True: # game loop
         x = 0
         for tile in layer:
             if tile == '0':
-                DISPLAY.blit(GAME_TILES['BreakableBlock'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['BreakableBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '1':
-                DISPLAY.blit(GAME_TILES['CastleHallBrickFloor'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['CastleHallBrickFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '2':
-                DISPLAY.blit(GAME_TILES['ClassicBlock'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['ClassicBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '3':
-                DISPLAY.blit(GAME_TILES['ChapelFloor'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['ChapelFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '4':
-                DISPLAY.blit(GAME_TILES['IceyBlock'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['IceyBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '5':
-                DISPLAY.blit(GAME_TILES['PillarSupport'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['PillarSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '6':
-                DISPLAY.blit(GAME_TILES['DrakeGround'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['DrakeGround'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '7':
-                DISPLAY.blit(GAME_TILES['HauntedPrisonFloor'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['HauntedPrisonFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '8':
-                DISPLAY.blit(GAME_TILES['BrickBlock'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['BrickBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '9':
-                DISPLAY.blit(GAME_TILES['CastleHallFloorSupport'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['CastleHallFloorSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '10':
-                DISPLAY.blit(GAME_TILES['ChapelSupport'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['ChapelSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '11':
-                DISPLAY.blit(GAME_TILES['GrassBlock'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['GrassBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '12':
-                DISPLAY.blit(GAME_TILES['IceFloor'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['IceFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '13':
-                DISPLAY.blit(GAME_TILES['PillarBlock'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['PillarBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '14':
-                DISPLAY.blit(GAME_TILES['GhostTrainFloor'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['GhostTrainFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '15':
-                DISPLAY.blit(GAME_TILES['MagmaPoolBlock'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['MagmaPoolBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '16':
-                DISPLAY.blit(GAME_TILES['MasterChamberFloor'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['MasterChamberFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '17':
-                DISPLAY.blit(GAME_TILES['MasterChamberPillarTop'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['MasterChamberPillarTop'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '18':
-                DISPLAY.blit(GAME_TILES['MasterChamberPillar'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['MasterChamberPillar'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '19':
-                DISPLAY.blit(GAME_TILES['MasterChamberSupport'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['MasterChamberSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '20':
-                DISPLAY.blit(GAME_TILES['WonderBlockFloor'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['WonderBlockFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '21':
-                DISPLAY.blit(GAME_TILES['WonderBlockSupport'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['WonderBlockSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '22':
-                DISPLAY.blit(GAME_TILES['CastleHallFloorPillar'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['CastleHallFloorPillar'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '23':
-                DISPLAY.blit(GAME_TILES['HauntedPrisonSupport'],(x*16-scroll[0],y*16-scroll[1]))
+                DISPLAY.blit(GAMETILES['HauntedPrisonSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile != '-1':
                 tile_rects.append(pg.Rect(x*16,y*16,16,16))
             x += 1
