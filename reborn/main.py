@@ -1,3 +1,4 @@
+from pygame_functions import *
 import pygame as pg, sys, os, csv
 from debug import debug
 from pygame.locals import *
@@ -18,8 +19,8 @@ def load_animation(path,frame_durations):
         animation_frame_id = animation_name + str(n)
         img_loc = path + '/' + animation_frame_id + '.png'
         # player_animations/idle/idle0.png
-        animation_image = pg.image.load(img_loc).convert()
-        animation_image.set_colorkey((0,0,0))
+        animation_image = pg.image.load(img_loc).convert_alpha()
+        animation_image.set_colorkey('black')
         animation_frames[animation_frame_id] = animation_image.copy()
         for i in range(frame):
             animation_frame_data.append(animation_frame_id)
@@ -35,10 +36,10 @@ def change_action(action_var,frame,new_value):
 '''ANIMATION SETUP'''
 animation_database = {}
 
-animation_database['run'] = load_animation('../imgs/wraethborn',[1,1])
-animation_database['idle'] = load_animation('../imgs/wraethborn',[1,1,0])
-# animation_database['run'] = load_animation('imgs/vegnath',[7,7])
-# animation_database['idle'] = load_animation('imgs/vegnath',[7,7,40])
+animation_database['idle'] = load_animation('../imgs/Player/idle',[6,6,6,6,6,6,6,6])
+animation_database['run'] = load_animation('../imgs/Player/run',[0,5,5,5,5,5,5,5])
+animation_database['jump'] = load_animation('../imgs/Player/jump',[1,1,1])
+# animation_database['attack'] = load_animation('../imgs/Player/attack',[1,1,1])
 
 '''SET DEFAULT PLAYER ANIM STATE'''
 player_action = 'idle'
@@ -46,11 +47,20 @@ player_frame = 0
 player_flip = False
 
 '''PLAYER RECT'''
-player_rect = pg.Rect(100,100,16,16)
+player_rect = pg.Rect(100,100,32,32)
 
 
 '''CREATE BG OBJECTS'''
-background_objects = [[0.25,[120,10,70,400]],[0.25,[280,30,40,400]],[0.5,[30,40,40,400]],[0.5,[130,90,100,400]],[0.5,[300,80,120,400]]]
+background_objects = [
+    [0.25,[120,10,17,400]],
+    [0.25,[250,2,40,400]],
+    [0.25,[450,30,90,400]],
+    [1,[340,3,70,400]],
+    [0.25,[530,80,14,400]],
+    [0.5,[30,40,40,400]],
+    [0.5,[130,90,100,400]],
+    [0.5,[300,80,120,400]],
+    ]
 
 
 '''PLAYER COLLISIONS TEST FUNC'''
@@ -96,7 +106,7 @@ def load_map(path):
 '''MAP INSTANCE'''
 game_map = load_map('../imgs/Tiled/TestMap1.csv')
 
-'''TILE INSTANCES'''
+'''TILE DICTIONARY'''
 GAME_TILES = {
     'ClassicBlock' : pg.image.load('../imgs/tiles/Classic.png'),
     'GrassBlock' : pg.image.load('../imgs/tiles/GrassBlock.png'),
@@ -110,6 +120,18 @@ GAME_TILES = {
     'CastleHallBrickFloor' : pg.image.load('../imgs/tiles/CastleHallBrickFloorBlock.png'),
     'BrickBlock' : pg.image.load('../imgs/tiles/BrickBlock.png'),
     'BreakableBlock' : pg.image.load('../imgs/tiles/BreakableBlock.png'),
+    'HauntedPrisonFloor' : pg.image.load('../imgs/tiles/Haunted Prison Floor.png'),
+    'GhostTrainFloor' : pg.image.load('../imgs/tiles/Ghost Train Floor.png'),
+    'MagmaPoolBlock' : pg.image.load('../imgs/tiles/Magma Pool Block.png'),
+    'MasterChamberFloor' : pg.image.load('../imgs/tiles/Master Chamber Floor.png'),
+    'MasterChamberPillarTop' : pg.image.load('../imgs/tiles/Master Chamber Sigil Pillar Top.png'),
+    'MasterChamberPillar' : pg.image.load('../imgs/tiles/Master Chamber Sigil Pillar.png'),
+    'MasterChamberSupport' : pg.image.load('../imgs/tiles/Master Chamber Sigil Support.png'),
+    'DrakeGround' : pg.image.load('../imgs/tiles/Drake Ground Floor.png'),
+    'WonderBlockFloor' : pg.image.load('../imgs/tiles/Wonder Block Floor.png'),
+    'WonderBlockSupport' : pg.image.load('../imgs/tiles/Wonder Block Support.png'),
+    'CastleHallFloorPillar' : pg.image.load('../imgs/tiles/Castle Hall Floor Pillar.png'),
+    'HauntedPrisonSupport' : pg.image.load('../imgs/tiles/Haunted Prison Support.png'),
 }
 
 
@@ -119,9 +141,13 @@ moving_left = False
 vertical_momentum = 0
 air_timer = 0
 
+
 '''GAME LOOP'''
 while True: # game loop
-    DISPLAY.fill((146,244,255)) # clear screen by filling it with blue
+    # if DEVMODE:
+    #     print('Developer Mode:',DEVMODE)
+    # print(vertical_momentum)
+    DISPLAY.fill((0,0,0)) #main bg color
 
     TRUESCROLL[0] += (player_rect.x-TRUESCROLL[0]-152)/20
     TRUESCROLL[1] += (player_rect.y-TRUESCROLL[1]-106)/20
@@ -131,13 +157,18 @@ while True: # game loop
 
 
     '''DRAW BACKGROUND OBJECTS'''
-    pg.draw.rect(DISPLAY,(7,80,75),pg.Rect(0,120,300,80))
+    pg.draw.rect(DISPLAY,(177,80,75),pg.Rect(0,120,300,80)) #halfscreen bg obj
     for background_object in background_objects:
-        obj_rect = pg.Rect(background_object[1][0]-scroll[0]*background_object[0],background_object[1][1]-scroll[1]*background_object[0],background_object[1][2],background_object[1][3])
+        obj_rect = pg.Rect(
+            background_object[1][0]-scroll[0]*background_object[0],
+            background_object[1][1]-scroll[1]*background_object[0],
+            background_object[1][2],
+            background_object[1][3],
+            )
         if background_object[0] == 0.5:
-            pg.draw.rect(DISPLAY,(14,222,150),obj_rect)
+            pg.draw.rect(DISPLAY,(143,22,10),obj_rect) #closer bg obj
         else:
-            pg.draw.rect(DISPLAY,(9,91,85),obj_rect)
+            pg.draw.rect(DISPLAY,(129,91,85),obj_rect) #farthest bg obj
 
 
     '''DRAW MAP'''
@@ -146,14 +177,54 @@ while True: # game loop
     for layer in game_map:
         x = 0
         for tile in layer:
-            if tile == '11':
-                DISPLAY.blit(GAME_TILES['PillarBlock'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '5':
-                DISPLAY.blit(GAME_TILES['PillarSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '0':
+                DISPLAY.blit(GAME_TILES['BreakableBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '1':
+                DISPLAY.blit(GAME_TILES['CastleHallBrickFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '2':
+                DISPLAY.blit(GAME_TILES['ClassicBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '3':
+                DISPLAY.blit(GAME_TILES['ChapelFloor'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '4':
                 DISPLAY.blit(GAME_TILES['IceyBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '5':
+                DISPLAY.blit(GAME_TILES['PillarSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '6':
+                DISPLAY.blit(GAME_TILES['DrakeGround'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '7':
+                DISPLAY.blit(GAME_TILES['HauntedPrisonFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '8':
+                DISPLAY.blit(GAME_TILES['BrickBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '9':
+                DISPLAY.blit(GAME_TILES['CastleHallFloorSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '10':
+                DISPLAY.blit(GAME_TILES['ChapelSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '11':
+                DISPLAY.blit(GAME_TILES['GrassBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '12':
                 DISPLAY.blit(GAME_TILES['IceFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '13':
+                DISPLAY.blit(GAME_TILES['PillarBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '14':
+                DISPLAY.blit(GAME_TILES['GhostTrainFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '15':
+                DISPLAY.blit(GAME_TILES['MagmaPoolBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '16':
+                DISPLAY.blit(GAME_TILES['MasterChamberFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '17':
+                DISPLAY.blit(GAME_TILES['MasterChamberPillarTop'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '18':
+                DISPLAY.blit(GAME_TILES['MasterChamberPillar'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '19':
+                DISPLAY.blit(GAME_TILES['MasterChamberSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '20':
+                DISPLAY.blit(GAME_TILES['WonderBlockFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '21':
+                DISPLAY.blit(GAME_TILES['WonderBlockSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '22':
+                DISPLAY.blit(GAME_TILES['CastleHallFloorPillar'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '23':
+                DISPLAY.blit(GAME_TILES['HauntedPrisonSupport'],(x*16-scroll[0],y*16-scroll[1]))
             if tile != '-1':
                 tile_rects.append(pg.Rect(x*16,y*16,16,16))
             x += 1
@@ -168,7 +239,14 @@ while True: # game loop
         player_movement[0] -= 2
     player_movement[1] += vertical_momentum
     vertical_momentum += 0.2
-    if vertical_momentum > 3:
+
+    #DEVELOPER MOMENTUM BYPASS
+    if DEVMODE:
+        if vertical_momentum > 10:
+            vertical_momentum = 10
+    
+    #DEFAULT MOMENTUM RULES
+    elif vertical_momentum > 3:
         vertical_momentum = 3
 
     if player_movement[0] == 0:
@@ -184,10 +262,14 @@ while True: # game loop
 
     if collisions['bottom'] == True:
         air_timer = 0
-        vertical_momentum = 0
-    else:
+        vertical_momentum = 1
+    if not collisions['bottom']:
         air_timer += 1
-
+        player_action,player_frame = change_action(player_action,player_frame,'jump') 
+    if vertical_momentum > 1:
+        if collisions['top']:
+            vertical_momentum = 0
+            air_timer = 0
 
     '''PLAY ANIMATION'''
     player_frame += 1
@@ -209,13 +291,39 @@ while True: # game loop
             if event.key == K_a:
                 moving_left = True
             if event.key == K_SPACE:
-                if air_timer < 6:
-                    vertical_momentum = -5
+                if air_timer < 4:
+                    jumping = True
+                    vertical_momentum = -3.5
+                #wall jump
+                if jumping and collisions['right']:
+                    vertical_momentum = -4.5
+                    jumping = False
+                if jumping and collisions['left']:
+                    vertical_momentum = -4.5
+                    jumping = False
+            
+            #dev mode
+            if event.key == K_HOME:
+                DEVMODE = True
+                print('DEVELOPER MODE:',DEVMODE)
+            if event.key == K_END:
+                DEVMODE = False
+                print('DEVELOPER MODE:',DEVMODE)
+            
+            if DEVMODE and event.key == K_RSHIFT:
+                print('RSHIFT')
+                vertical_momentum = -10
+            if DEVMODE and event.key == K_SLASH:
+                print('hello dev')
+
+
         if event.type == KEYUP:
             if event.key == K_d:
                 moving_right = False
             if event.key == K_a:
                 moving_left = False
+            # if event.key == K_SPACE:
+            #     jumping = False
         
     SCREEN.blit(pg.transform.scale(DISPLAY,WINDOW_SIZE),(0,0))
     pg.display.update()
