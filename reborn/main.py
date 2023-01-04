@@ -1,35 +1,11 @@
-import pygame, sys, os
-
-clock = pygame.time.Clock()
-
+import pygame as pg, sys, os, csv
+from debug import debug
 from pygame.locals import *
-pygame.init() # initiates pygame
+from settings import *
 
-pygame.display.set_caption('Pygame Platformer')
+pg.init() # initiates pg
 
-WINDOW_SIZE = (600,400)
-
-screen = pygame.display.set_mode(WINDOW_SIZE,0,32) # initiate the window
-
-display = pygame.Surface((300,200)) # used as the surface for rendering, which is scaled
-
-moving_right = False
-moving_left = False
-vertical_momentum = 0
-air_timer = 0
-
-true_scroll = [0,0]
-
-def load_map(path):
-    f = open(path + '.txt','r')
-    data = f.read()
-    f.close()
-    data = data.split('\n')
-    game_map = []
-    for row in data:
-        game_map.append(list(row))
-    return game_map
-
+'''ANIMATION FUNC'''
 global animation_frames
 animation_frames = {}
 
@@ -42,8 +18,8 @@ def load_animation(path,frame_durations):
         animation_frame_id = animation_name + str(n)
         img_loc = path + '/' + animation_frame_id + '.png'
         # player_animations/idle/idle0.png
-        animation_image = pygame.image.load(img_loc).convert()
-        animation_image.set_colorkey((255,255,255))
+        animation_image = pg.image.load(img_loc).convert()
+        animation_image.set_colorkey((0,0,0))
         animation_frames[animation_frame_id] = animation_image.copy()
         for i in range(frame):
             animation_frame_data.append(animation_frame_id)
@@ -55,28 +31,29 @@ def change_action(action_var,frame,new_value):
         action_var = new_value
         frame = 0
     return action_var,frame
-        
 
+'''ANIMATION SETUP'''
 animation_database = {}
 
-animation_database['run'] = load_animation('../imgs/vegnath',[1,1])
-animation_database['idle'] = load_animation('../imgs/vegnath',[1,1,0])
+animation_database['run'] = load_animation('../imgs/wraethborn',[1,1])
+animation_database['idle'] = load_animation('../imgs/wraethborn',[1,1,0])
 # animation_database['run'] = load_animation('imgs/vegnath',[7,7])
 # animation_database['idle'] = load_animation('imgs/vegnath',[7,7,40])
 
-game_map = load_map('map2')
-
-grass_img = pygame.image.load('../imgs/tiles/Classic.png')
-dirt_img = pygame.image.load('../imgs/tiles/GrassBlock.png')
-
+'''SET DEFAULT PLAYER ANIM STATE'''
 player_action = 'idle'
 player_frame = 0
 player_flip = False
 
-player_rect = pygame.Rect(100,100,5,13)
+'''PLAYER RECT'''
+player_rect = pg.Rect(100,100,16,16)
 
+
+'''CREATE BG OBJECTS'''
 background_objects = [[0.25,[120,10,70,400]],[0.25,[280,30,40,400]],[0.5,[30,40,40,400]],[0.5,[130,90,100,400]],[0.5,[300,80,120,400]]]
 
+
+'''PLAYER COLLISIONS TEST FUNC'''
 def collision_test(rect,tiles):
     hit_list = []
     for tile in tiles:
@@ -84,6 +61,7 @@ def collision_test(rect,tiles):
             hit_list.append(tile)
     return hit_list
 
+'''PLAYER MOVE FUNC'''
 def move(rect,movement,tiles):
     collision_types = {'top':False,'bottom':False,'right':False,'left':False}
     rect.x += movement[0]
@@ -106,37 +84,83 @@ def move(rect,movement,tiles):
             collision_types['top'] = True
     return rect, collision_types
 
-while True: # game loop
-    display.fill((146,244,255)) # clear screen by filling it with blue
+'''LOAD MAP'''
+def load_map(path):
+    game_map = []
+    with open(os.path.join(path)) as data:
+        data = csv.reader(data,delimiter=",")
+        for row in data:
+            game_map.append(list(row))
+    return game_map
 
-    true_scroll[0] += (player_rect.x-true_scroll[0]-152)/20
-    true_scroll[1] += (player_rect.y-true_scroll[1]-106)/20
-    scroll = true_scroll.copy()
+'''MAP INSTANCE'''
+game_map = load_map('../imgs/Tiled/TestMap1.csv')
+
+'''TILE INSTANCES'''
+GAME_TILES = {
+    'ClassicBlock' : pg.image.load('../imgs/tiles/Classic.png'),
+    'GrassBlock' : pg.image.load('../imgs/tiles/GrassBlock.png'),
+    'IceFloor' : pg.image.load('../imgs/tiles/IceFloor.png'),
+    'IceyBlock' : pg.image.load('../imgs/tiles/IceyBlock.png'),
+    'PillarBlock' : pg.image.load('../imgs/tiles/PillarBlock.png'),
+    'PillarSupport' : pg.image.load('../imgs/tiles/PillarSupportBlock.png'),
+    'ChapelSupport' : pg.image.load('../imgs/tiles/ChapelSupport.png'),
+    'ChapelFloor' : pg.image.load('../imgs/tiles/ChapelFloor.png'),
+    'CastleHallFloorSupport' : pg.image.load('../imgs/tiles/CastleHallFloorSupportBlock.png'),
+    'CastleHallBrickFloor' : pg.image.load('../imgs/tiles/CastleHallBrickFloorBlock.png'),
+    'BrickBlock' : pg.image.load('../imgs/tiles/BrickBlock.png'),
+    'BreakableBlock' : pg.image.load('../imgs/tiles/BreakableBlock.png'),
+}
+
+
+'''PLAYER STATUS VARS'''
+moving_right = False
+moving_left = False
+vertical_momentum = 0
+air_timer = 0
+
+'''GAME LOOP'''
+while True: # game loop
+    DISPLAY.fill((146,244,255)) # clear screen by filling it with blue
+
+    TRUESCROLL[0] += (player_rect.x-TRUESCROLL[0]-152)/20
+    TRUESCROLL[1] += (player_rect.y-TRUESCROLL[1]-106)/20
+    scroll = TRUESCROLL.copy()
     scroll[0] = int(scroll[0])
     scroll[1] = int(scroll[1])
 
-    pygame.draw.rect(display,(7,80,75),pygame.Rect(0,120,300,80))
-    for background_object in background_objects:
-        obj_rect = pygame.Rect(background_object[1][0]-scroll[0]*background_object[0],background_object[1][1]-scroll[1]*background_object[0],background_object[1][2],background_object[1][3])
-        if background_object[0] == 0.5:
-            pygame.draw.rect(display,(14,222,150),obj_rect)
-        else:
-            pygame.draw.rect(display,(9,91,85),obj_rect)
 
+    '''DRAW BACKGROUND OBJECTS'''
+    pg.draw.rect(DISPLAY,(7,80,75),pg.Rect(0,120,300,80))
+    for background_object in background_objects:
+        obj_rect = pg.Rect(background_object[1][0]-scroll[0]*background_object[0],background_object[1][1]-scroll[1]*background_object[0],background_object[1][2],background_object[1][3])
+        if background_object[0] == 0.5:
+            pg.draw.rect(DISPLAY,(14,222,150),obj_rect)
+        else:
+            pg.draw.rect(DISPLAY,(9,91,85),obj_rect)
+
+
+    '''DRAW MAP'''
     tile_rects = []
     y = 0
     for layer in game_map:
         x = 0
         for tile in layer:
-            if tile == '1':
-                display.blit(dirt_img,(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '2':
-                display.blit(grass_img,(x*16-scroll[0],y*16-scroll[1]))
-            if tile != '0':
-                tile_rects.append(pygame.Rect(x*16,y*16,16,16))
+            if tile == '11':
+                DISPLAY.blit(GAME_TILES['PillarBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '5':
+                DISPLAY.blit(GAME_TILES['PillarSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '4':
+                DISPLAY.blit(GAME_TILES['IceyBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '10':
+                DISPLAY.blit(GAME_TILES['IceFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile != '-1':
+                tile_rects.append(pg.Rect(x*16,y*16,16,16))
             x += 1
         y += 1
 
+
+    '''PLAYER MOVEMENT HANDLING'''
     player_movement = [0,0]
     if moving_right == True:
         player_movement[0] += 2
@@ -164,32 +188,35 @@ while True: # game loop
     else:
         air_timer += 1
 
+
+    '''PLAY ANIMATION'''
     player_frame += 1
     if player_frame >= len(animation_database[player_action]):
         player_frame = 0
     player_img_id = animation_database[player_action][player_frame]
     player_img = animation_frames[player_img_id]
-    display.blit(pygame.transform.flip(player_img,player_flip,False),(player_rect.x-scroll[0],player_rect.y-scroll[1]))
+    DISPLAY.blit(pg.transform.flip(player_img,player_flip,False),(player_rect.x-scroll[0],player_rect.y-scroll[1]))
 
-
-    for event in pygame.event.get(): # event loop
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+    '''EVENT HANDLER'''
+    for event in pg.event.get():
         if event.type == KEYDOWN:
-            if event.key == K_RIGHT:
+            if event.key == K_q:
+                print("\nGame Closed\n")
+                pg.QUIT
+                sys.exit()
+            if event.key == K_d:
                 moving_right = True
-            if event.key == K_LEFT:
+            if event.key == K_a:
                 moving_left = True
-            if event.key == K_UP:
+            if event.key == K_SPACE:
                 if air_timer < 6:
                     vertical_momentum = -5
         if event.type == KEYUP:
-            if event.key == K_RIGHT:
+            if event.key == K_d:
                 moving_right = False
-            if event.key == K_LEFT:
+            if event.key == K_a:
                 moving_left = False
         
-    screen.blit(pygame.transform.scale(display,WINDOW_SIZE),(0,0))
-    pygame.display.update()
-    clock.tick(60)
+    SCREEN.blit(pg.transform.scale(DISPLAY,WINDOW_SIZE),(0,0))
+    pg.display.update()
+    CLOCK.tick(60)

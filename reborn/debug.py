@@ -8,3 +8,4 @@ def debug(info,y=10,x=10):
     debugRect = debugSurface.get_rect(topleft=(x,y))
     pg.draw.rect(displaySurface,'Black',debugRect)
     displaySurface.blit(debugSurface,debugRect)
+ 
