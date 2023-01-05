@@ -5,6 +5,7 @@ from pygame.locals import *
 from settings import *
 
 pg.init() # initiates pg
+pg.display.set_caption('CC alpha-v0.1.1')
 pg.display.set_icon(gameIcon)
 '''ANIMATION FUNC'''
 global animation_frames
