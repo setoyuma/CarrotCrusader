@@ -203,7 +203,7 @@ while True: # game loop
             if tile == '25':
                 DISPLAY.blit(GAMETILES['LevelEnd'],(x*16-scroll[0],y*16-scroll[1]))
                 pass
-            if tile not in ('-1','24'):
+            if tile not in ('-1','24','25'):
                 tile_rects.append(pg.Rect(x*16,y*16,16,16))
             x += 1
         y += 1
@@ -250,7 +250,7 @@ while True: # game loop
         air_timer = 0
         vertical_momentum = 1
     if not collisions['bottom']:
-        air_timer += 1
+        air_timer += 2
         player_action,player_frame = change_action(player_action,player_frame,'jump') 
     
     '''WALL HUG SPRITE SETUP'''
@@ -287,15 +287,15 @@ while True: # game loop
             if event.key == K_a:
                 moving_left = True
             if event.key == K_SPACE:
-                if air_timer < 4:
+                if air_timer < 3:
                     jumping = True
-                    vertical_momentum = -3.5
+                    vertical_momentum = -4.5
                 #wall jump
                 if collisions['right'] and jumping:
-                    vertical_momentum = -4.5
+                    vertical_momentum = -5
                     jumping = False
                 if collisions['left'] and jumping:
-                    vertical_momentum = -4.5
+                    vertical_momentum = -5
                     jumping = False
             
             #dev mode
