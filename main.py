@@ -1,11 +1,11 @@
-from pygame_functions import *
+# from pygame_functions import *
 import pygame as pg, sys, os, csv
 from debug import debug
 from pygame.locals import *
 from settings import *
 
 pg.init() # initiates pg
-
+pg.display.set_icon(gameIcon)
 '''ANIMATION FUNC'''
 global animation_frames
 animation_frames = {}
@@ -36,9 +36,10 @@ def change_action(action_var,frame,new_value):
 '''ANIMATION SETUP'''
 animation_database = {}
 
-animation_database['idle'] = load_animation('../imgs/Player/idle',[6,6,6,6,6,6,6,6])
-animation_database['run'] = load_animation('../imgs/Player/run',[0,5,5,5,5,5,5,5])
-animation_database['jump'] = load_animation('../imgs/Player/jump',[1,1,1])
+animation_database['idle'] = load_animation('./imgs/Player/idle',[6,6,0,6,6,0,6,6])
+animation_database['run'] = load_animation('./imgs/Player/run',[0,5,5,5,0,5,5,5])
+animation_database['jump'] = load_animation('./imgs/Player/jump',[1,1,1])
+animation_database['wallJump'] = load_animation('./imgs/Player/walljump',[1,1,1])
 # animation_database['attack'] = load_animation('../imgs/Player/attack',[1,1,1])
 
 '''SET DEFAULT PLAYER ANIM STATE'''
@@ -47,7 +48,7 @@ player_frame = 0
 player_flip = False
 
 '''PLAYER RECT'''
-player_rect = pg.Rect(100,100,32,32)
+player_rect = pg.Rect(200,1270,32,32)
 
 
 '''CREATE BG OBJECTS'''
@@ -104,7 +105,7 @@ def load_map(path):
     return game_map
 
 '''MAP INSTANCE'''
-game_map = load_map('../imgs/Tiled/TestMap1.csv')
+game_map = load_map('./imgs/Tiled/CarrotCrusaderStage0MapWIP.csv')
 
 '''PLAYER STATUS VARS'''
 moving_right = False
@@ -151,52 +152,58 @@ while True: # game loop
             if tile == '0':
                 DISPLAY.blit(GAMETILES['BreakableBlock'],(x*16-scroll[0],y*16-scroll[1]))
             if tile == '1':
-                DISPLAY.blit(GAMETILES['CastleHallBrickFloor'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '2':
-                DISPLAY.blit(GAMETILES['ClassicBlock'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '3':
-                DISPLAY.blit(GAMETILES['ChapelFloor'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '4':
-                DISPLAY.blit(GAMETILES['IceyBlock'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '5':
-                DISPLAY.blit(GAMETILES['PillarSupport'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '6':
-                DISPLAY.blit(GAMETILES['DrakeGround'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '7':
-                DISPLAY.blit(GAMETILES['HauntedPrisonFloor'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '8':
-                DISPLAY.blit(GAMETILES['BrickBlock'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '9':
-                DISPLAY.blit(GAMETILES['CastleHallFloorSupport'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '10':
-                DISPLAY.blit(GAMETILES['ChapelSupport'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '11':
                 DISPLAY.blit(GAMETILES['GrassBlock'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '12':
-                DISPLAY.blit(GAMETILES['IceFloor'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '13':
-                DISPLAY.blit(GAMETILES['PillarBlock'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '14':
-                DISPLAY.blit(GAMETILES['GhostTrainFloor'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '15':
-                DISPLAY.blit(GAMETILES['MagmaPoolBlock'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '16':
-                DISPLAY.blit(GAMETILES['MasterChamberFloor'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '17':
-                DISPLAY.blit(GAMETILES['MasterChamberPillarTop'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '18':
-                DISPLAY.blit(GAMETILES['MasterChamberPillar'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '19':
-                DISPLAY.blit(GAMETILES['MasterChamberSupport'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '20':
-                DISPLAY.blit(GAMETILES['WonderBlockFloor'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '21':
-                DISPLAY.blit(GAMETILES['WonderBlockSupport'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '22':
+            if tile == '2':
+                DISPLAY.blit(GAMETILES['CastleHallBrickFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '3':
                 DISPLAY.blit(GAMETILES['CastleHallFloorPillar'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile == '23':
+            if tile == '4':
+                DISPLAY.blit(GAMETILES['BrickBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '5':
+                DISPLAY.blit(GAMETILES['CastleHallFloorSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '6':
+                DISPLAY.blit(GAMETILES['ChapelFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '7':
+                DISPLAY.blit(GAMETILES['ChapelSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '8':
+                DISPLAY.blit(GAMETILES['IceFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '9':
+                DISPLAY.blit(GAMETILES['IceyBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '10':
+                DISPLAY.blit(GAMETILES['DrakeGround'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '11':
+                DISPLAY.blit(GAMETILES['MagmaPoolBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '12':
+                DISPLAY.blit(GAMETILES['WonderBlockFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '13':
+                DISPLAY.blit(GAMETILES['WonderBlockSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '14':
+                DISPLAY.blit(GAMETILES['PillarBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '15':
+                DISPLAY.blit(GAMETILES['PillarSupport'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '16':
+                DISPLAY.blit(GAMETILES['GhostTrainFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '17':
+                DISPLAY.blit(GAMETILES['HauntedPrisonFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '18':
                 DISPLAY.blit(GAMETILES['HauntedPrisonSupport'],(x*16-scroll[0],y*16-scroll[1]))
-            if tile != '-1':
+            if tile == '19':
+                DISPLAY.blit(GAMETILES['MasterChamberFloor'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '20':
+                DISPLAY.blit(GAMETILES['MasterChamberSigil'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '21':
+                DISPLAY.blit(GAMETILES['MasterChamberPillarTop'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '22':
+                DISPLAY.blit(GAMETILES['MasterChamberPillar'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '23':
+                DISPLAY.blit(GAMETILES['ClassicBlock'],(x*16-scroll[0],y*16-scroll[1]))
+            if tile == '24':
+                DISPLAY.blit(GAMETILES['PlayerSpawn'],(x*16-scroll[0],y*16-scroll[1]))
+                pass
+            if tile == '25':
+                DISPLAY.blit(GAMETILES['LevelEnd'],(x*16-scroll[0],y*16-scroll[1]))
+                pass
+            if tile not in ('-1','24'):
                 tile_rects.append(pg.Rect(x*16,y*16,16,16))
             x += 1
         y += 1
@@ -210,6 +217,13 @@ while True: # game loop
         player_movement[0] -= 2
     player_movement[1] += vertical_momentum
     vertical_momentum += 0.2
+
+    '''RESPAWN'''
+    if player_rect.y > tile_rects.pop()[1]+200:
+        print('RESPAWN\n')
+        player_rect.x = 200
+        player_rect.y = 1270
+
 
     #DEVELOPER MOMENTUM BYPASS
     if DEVMODE:
@@ -231,12 +245,23 @@ while True: # game loop
 
     player_rect,collisions = move(player_rect,player_movement,tile_rects)
 
-    if collisions['bottom'] == True:
+    '''FALL SPRITE SETUP'''
+    if collisions['bottom']:
         air_timer = 0
         vertical_momentum = 1
     if not collisions['bottom']:
         air_timer += 1
         player_action,player_frame = change_action(player_action,player_frame,'jump') 
+    
+    '''WALL HUG SPRITE SETUP'''
+    if not collisions['bottom']:
+        if collisions ['left'] and jumping:
+            player_action,player_frame = change_action(player_action,player_frame,'wallJump') 
+    if not collisions['bottom']:
+        if collisions ['right'] and jumping:
+            player_action,player_frame = change_action(player_action,player_frame,'wallJump') 
+
+    '''HEAD BUMP'''
     if vertical_momentum > 1:
         if collisions['top']:
             vertical_momentum = 0
@@ -266,10 +291,10 @@ while True: # game loop
                     jumping = True
                     vertical_momentum = -3.5
                 #wall jump
-                if jumping and collisions['right']:
+                if collisions['right'] and jumping:
                     vertical_momentum = -4.5
                     jumping = False
-                if jumping and collisions['left']:
+                if collisions['left'] and jumping:
                     vertical_momentum = -4.5
                     jumping = False
             
