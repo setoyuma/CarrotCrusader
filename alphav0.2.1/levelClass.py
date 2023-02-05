@@ -151,10 +151,6 @@ class Level():
                         pass
 
 
-
-
-
-
     def cameraScroll(self):
         player = self.player.sprite
         playerX = player.rect.centerx
