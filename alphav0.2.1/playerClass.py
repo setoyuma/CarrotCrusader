@@ -5,6 +5,12 @@ from pygame.locals import *
 # i put this here in nvim
 #lmao my balls itch
 
+
+# use anim func from player in level class to render anim tiles with smaller dict
+
+
+
+
 class Player(pg.sprite.Sprite):
     def __init__(self,pos,surf):
         super().__init__()
