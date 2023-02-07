@@ -30,6 +30,10 @@ class Player(pg.sprite.Sprite):
         self.gravity = 0.8
         self.jumpSpeed = -10
         self.airBorne = False
+        
+        #player flip code
+        # if self.direction.x < 0:
+        #     self.image = pg.transform.flip(self.image,True,False)
 
     def importAssets(self):
         animPath = '../assets/Player/Alryn/'
@@ -53,7 +57,8 @@ class Player(pg.sprite.Sprite):
             self.frameIndex = 0
 
         self.image = animation[int(self.frameIndex)]
-    
+
+        
     def showHitBoxes(self, surf, target):
         pg.draw.rect(surf,'limeGreen',target.rect)
 
@@ -61,7 +66,7 @@ class Player(pg.sprite.Sprite):
     def getInput(self,surf):
         keys = pg.key.get_pressed()
         surf = surf
-
+        
         if keys[pg.K_d]:
             self.direction.x = 1
         elif keys[pg.K_a]:
