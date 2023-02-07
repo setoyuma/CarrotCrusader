@@ -5,8 +5,8 @@ class ParticleEffect(pg.sprite.Sprite):
     def __init__(self,pos,type):
         super().__init__()
         self.frameIndex = 0
-        
-        self.animationSpeed = 1
+
+        self.animationSpeed = .5
 
         if type == "Jump":
             self.frames = importFolder('../assets/dust_particles/jump')

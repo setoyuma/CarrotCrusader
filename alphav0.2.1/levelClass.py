@@ -14,6 +14,8 @@ class Level():
         #dust
         self.dustSprite = pg.sprite.GroupSingle()
 
+        #checks
+        self.playerGrounded = False
 
 
     def createJumpParticle(self,pos):
@@ -24,6 +26,22 @@ class Level():
 
         jumpParticleSprite = ParticleEffect(pos,'Jump')
         self.dustSprite.add(jumpParticleSprite)
+
+    def groundedCheck(self):
+        if self.player.sprite.onGround:
+            self.playerGrounded = True
+        else:
+            self.playerGrounded = False
+
+
+    def createLandingParticle(self):
+        if not self.playerGrounded and self.player.sprite.onGround and not self.dustSprite.sprites():
+            if self.player.sprite.facingRight:
+                offset = pg.math.Vector2(5,15)
+            else:
+                offset = pg.math.Vector2(5,15)
+            fallParticle = ParticleEffect(self.player.sprite.rect.midbottom - offset,"Land")
+            self.dustSprite.add(fallParticle)
 
     def DrawMap(self,mapData):
         self.tiles = pg.sprite.Group()
@@ -225,8 +243,8 @@ class Level():
 
     def Run(self):
         #dust particles
-        # self.dustSprite.update(self.worldShift)
-        # self.dustSprite.draw(self.displaySurface)
+        self.dustSprite.update(self.worldShift)
+        self.dustSprite.draw(self.displaySurface)
             
         #Map Tiles
         self.tiles.update(self.worldShift)
@@ -237,5 +255,9 @@ class Level():
         #player
         self.player.update()
         self.horizontalCollision()
+        self.groundedCheck()
         self.verticalCollision()
+        
+        #landing particles
+        # self.createLandingParticle()
         self.player.draw(self.displaySurface)

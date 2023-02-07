@@ -120,7 +120,7 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_SPACE]:
             self.jump()
 
-            self.createJumpParticle(self.rect.midbottom)
+            # self.createJumpParticle(self.rect.midbottom)
 
         if keys[pg.K_h]:
             print('hitbox view')
