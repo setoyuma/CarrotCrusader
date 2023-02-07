@@ -9,8 +9,6 @@ class Level():
         self.DrawMap(mapData)
         self.worldShift = 0
         
-
-
     def DrawMap(self,mapData):
         self.tiles = pg.sprite.Group()
         self.player = pg.sprite.GroupSingle()

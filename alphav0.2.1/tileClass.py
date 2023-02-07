@@ -45,4 +45,4 @@ class Tile(pg.sprite.Sprite):
 
     def update(self,xShift):
         self.rect.x += xShift
-        self.animate()
+        # self.animate()
