@@ -8,6 +8,7 @@ class Level():
         self.displaySurface = surface
         self.DrawMap(mapData)
         self.worldShift = 0
+        self.currentPlayerX = 0
         
     def DrawMap(self,mapData):
         self.tiles = pg.sprite.Group()
@@ -74,7 +75,7 @@ class Level():
                         # tile = Tile((x,y),GAMETILES["DrakeGround"])
                         # self.tiles.add(tile)
                     case'11':
-                        tile = Tile((x,y),GAMETILES["MagmaPoolBlock"],True)
+                        tile = Tile((x,y),GAMETILES["MagmaPoolBlock"])
                         self.tiles.add(tile)
                         # tile = Tile((x,y),GAMETILES["MagmaPoolBlock"])
                         # self.tiles.add(tile)
@@ -154,14 +155,14 @@ class Level():
         playerX = player.rect.centerx
         directionX = player.direction.x
         if playerX <= (WINDOWSIZE[0]/2)/6 and directionX < 0:
-            self.worldShift = 3
+            self.worldShift = 2
             player.speed = 0
         elif playerX >= (WINDOWSIZE[0]/4) - (WINDOWSIZE[0]/8.5) and directionX > 0:
-            self.worldShift = -3
+            self.worldShift = -2
             player.speed = 0
         else:
             self.worldShift = 0
-            player.speed = 3
+            player.speed = 2
 
     def horizontalCollision(self):
         player = self.player.sprite
@@ -169,24 +170,46 @@ class Level():
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(player.rect):
+                
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
+                    player.onLeftWall = True
+                    self.currentPlayerX = player.rect.left
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
-    
+                    player.onRightWall = True
+                    self.currentPlayerX = player.rect.right
+            
+        if player.onLeftWall and (player.rect.left < self.currentPlayerX or player.direction.x >= 0):
+            player.onLeftWall = False
+        if player.onRightWall and (player.rect.right < self.currentPlayerX or player.direction.x <= 0):
+            player.onRightWall = False
+
+
+
+
     def verticalCollision(self):
         player = self.player.sprite
         player.applyGravity()
 
         for sprite in self.tiles.sprites():
             if sprite.rect.colliderect(player.rect):
+                
                 if player.direction.y > 0:
                     player.rect.bottom = sprite.rect.top
                     player.airBorne = False
                     player.direction.y = 0
+                    player.onGround = True
+                
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+                    player.onCeiling = True
+
+        if player.onGround and player.direction.y < 0 or player.direction.y > 1:
+            player.onGround = False
+        if player.onCeiling and player.direction.y > 0:
+            player.onCeiling = False
 
     def Run(self):
         
