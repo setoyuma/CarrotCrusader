@@ -5,7 +5,7 @@ from pygame.locals import *
 # i put this here in nvim
 
 class Player(pg.sprite.Sprite):
-    def __init__(self,pos,surf):
+    def __init__(self,pos,surf,createJumpParticle):
         super().__init__()
         self.importAssets()
         self.displaySurface = surf
@@ -21,6 +21,7 @@ class Player(pg.sprite.Sprite):
         self.importRunParticles()
         self.dustanimationSpeed = .3
         self.dustFrameIndex = 0
+        self.createJumpParticle = createJumpParticle
         
         
         #player movement
@@ -118,6 +119,8 @@ class Player(pg.sprite.Sprite):
 
         if keys[pg.K_SPACE]:
             self.jump()
+
+            self.createJumpParticle(self.rect.midbottom)
 
         if keys[pg.K_h]:
             print('hitbox view')

@@ -2,6 +2,7 @@ import pygame as pg, os, csv
 from settings02 import *
 from playerClass import Player
 from tileClass import Tile
+from particles import ParticleEffect
 
 class Level():
     def __init__(self,mapData,surface) -> None:
@@ -9,7 +10,21 @@ class Level():
         self.DrawMap(mapData)
         self.worldShift = 0
         self.currentPlayerX = 0
-        
+
+        #dust
+        self.dustSprite = pg.sprite.GroupSingle()
+
+
+
+    def createJumpParticle(self,pos):
+        if self.player.sprite.facingRight:
+            pos -= pg.math.Vector2(10,5)
+        else:
+            pos += pg.math.Vector2(10,-5)
+
+        jumpParticleSprite = ParticleEffect(pos,'Jump')
+        self.dustSprite.add(jumpParticleSprite)
+
     def DrawMap(self,mapData):
         self.tiles = pg.sprite.Group()
         self.player = pg.sprite.GroupSingle()
@@ -140,7 +155,7 @@ class Level():
                         # tile = Tile((x,y),GAMETILES["ClassicBlock"])
                         # self.tiles.add(tile)
                     case '24':
-                        self.playerSprite = Player((x,y),self.displaySurface)
+                        self.playerSprite = Player((x,y),self.displaySurface,self.createJumpParticle)
                         # self.playerSprite.rect.inflate_ip(-15,0)
                         self.player.add(self.playerSprite)
                     case'25':
@@ -185,9 +200,6 @@ class Level():
         if player.onRightWall and (player.rect.right < self.currentPlayerX or player.direction.x <= 0):
             player.onRightWall = False
 
-
-
-
     def verticalCollision(self):
         player = self.player.sprite
         player.applyGravity()
@@ -212,12 +224,16 @@ class Level():
             player.onCeiling = False
 
     def Run(self):
-        
+        #dust particles
+        # self.dustSprite.update(self.worldShift)
+        # self.dustSprite.draw(self.displaySurface)
+            
         #Map Tiles
         self.tiles.update(self.worldShift)
         self.tiles.draw(self.displaySurface)
         self.cameraScroll()
         
+
         #player
         self.player.update()
         self.horizontalCollision()
