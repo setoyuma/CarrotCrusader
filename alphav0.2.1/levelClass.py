@@ -259,5 +259,5 @@ class Level():
         self.verticalCollision()
         
         #landing particles
-        # self.createLandingParticle()
+        self.createLandingParticle()
         self.player.draw(self.displaySurface)
