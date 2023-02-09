@@ -31,7 +31,7 @@ class Game():
     def Run(self):
         while True:
             # self.screen.fill('black')
-            self.scaleDisplay.fill('blue')
+            self.scaleDisplay.fill('dark red')
             self.map.Run()
 
             #event handler

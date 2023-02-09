@@ -34,7 +34,7 @@ class AnimatedTile(Tile):
 	def animate(self):
 		self.frame_index += self.animSpeed
 		if self.frame_index >= len(self.frames):
-			self.frame_index = 0
+			self.frame_index = 1
 		self.image = self.frames[int(self.frame_index)]
 
 	def update(self,shift):
@@ -43,7 +43,7 @@ class AnimatedTile(Tile):
 
 class AnimBlock(AnimatedTile):
     def __init__(self,size,x,y,path):
-        self.animSpeed = 0.2
+        self.animSpeed = 0.18
         super().__init__(size,x,y,path)
         center_x = x + int(size/2)
         center_y = y + int(size/2)
