@@ -25,9 +25,9 @@ class Player(pg.sprite.Sprite):
         
         #player movement
         self.direction = pg.math.Vector2(0,0)
-        self.speed = 1
-        self.gravity = 0.8
-        self.jumpSpeed = -10
+        self.speed = .8
+        self.gravity = 0.4
+        self.jumpSpeed = -7
         self.airBorne = False
         
         #player status
@@ -128,10 +128,10 @@ class Player(pg.sprite.Sprite):
     def getState(self):
         if self.direction.y < 0:
             self.status = 'Jump'
-        # elif self.direction.y > .9:
-        #     self.status = 'Fall'
+        elif self.direction.y > .9:
+            self.status = 'Fall'
         else:
-            if self.direction.x != 0:
+            if self.direction.x != 0 and self.onGround:
                 self.status = 'Run'
             else:
                 self.status = 'Idle'
