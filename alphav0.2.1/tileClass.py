@@ -43,7 +43,7 @@ class AnimatedTile(Tile):
 
 class AnimBlock(AnimatedTile):
     def __init__(self,size,x,y,path):
-        self.animSpeed = 0.18
+        self.animSpeed = 0.19
         super().__init__(size,x,y,path)
         center_x = x + int(size/2)
         center_y = y + int(size/2)
