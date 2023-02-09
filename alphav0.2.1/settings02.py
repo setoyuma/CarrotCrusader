@@ -9,6 +9,7 @@ DISPLAY = pg.Surface((300,200)) # used as the surface for rendering, which is sc
 TILESIZE = 16
 FPS = 60
 LEVELMAP = './TestMap1.csv'
+# LEVELMAP = '../map/WIPMAP.csv'
 TRUESCROLL = [0,0]
 jumping = False
 DEVMODE = False
