@@ -23,7 +23,6 @@ class Player(pg.sprite.Sprite):
         self.dustFrameIndex = 0
         self.createJumpParticle = createJumpParticle
         
-        
         #player movement
         self.direction = pg.math.Vector2(0,0)
         self.speed = 1
@@ -85,7 +84,7 @@ class Player(pg.sprite.Sprite):
         elif self.onCeiling:
             self.rect = self.image.get_rect(midtop=self.rect.midtop)
 
-    def runParticlesAnimator(self):
+    def runningParticlesAnimator(self):
         if self.status == "Run" and self.onGround:
             self.dustFrameIndex += self.dustanimationSpeed
             if self.dustFrameIndex >= len(self.runParticles):
@@ -119,9 +118,9 @@ class Player(pg.sprite.Sprite):
 
         if keys[pg.K_SPACE]:
             self.jump()
-
             # self.createJumpParticle(self.rect.midbottom)
 
+        '''SHOW HITBOX/RECT'''
         if keys[pg.K_h]:
             print('hitbox view')
             self.showHitBoxes(surf,self)
@@ -152,4 +151,4 @@ class Player(pg.sprite.Sprite):
         self.getInput(self.displaySurface)
         self.getState()
         self.animate()
-        self.runParticlesAnimator()
+        self.runningParticlesAnimator()

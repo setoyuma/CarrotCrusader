@@ -1,7 +1,7 @@
 import pygame as pg, os, csv
 from settings02 import *
 from playerClass import Player
-from tileClass import Tile
+from tileClass import Tile,MagmaPool,StaticTile
 from particles import ParticleEffect
 
 class Level():
@@ -17,7 +17,6 @@ class Level():
         #checks
         self.playerGrounded = False
 
-
     def createJumpParticle(self,pos):
         if self.player.sprite.facingRight:
             pos -= pg.math.Vector2(10,5)
@@ -32,7 +31,6 @@ class Level():
             self.playerGrounded = True
         else:
             self.playerGrounded = False
-
 
     def createLandingParticle(self):
         if not self.playerGrounded and self.player.sprite.onGround and not self.dustSprite.sprites():
@@ -53,133 +51,134 @@ class Level():
 
                 match cell:
                     case'0':
-                        tile = Tile((x,y),GAMETILES["BreakableBlock"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["BreakableBlock"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["BreakableBlock"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["BreakableBlock"],'')
                         # self.tiles.add(tile)
                     case'1':
-                        tile = Tile((x,y),GAMETILES["GrassBlock"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["GrassBlock"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["GrassBlock"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["GrassBlock"],'')
                         # self.tiles.add(tile)
                     case'2':
-                        tile = Tile((x,y),GAMETILES["CastleHallBrickFloor"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["CastleHallBrickFloor"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["CastleHallBrickFloor"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["CastleHallBrickFloor"],'')
                         # self.tiles.add(tile)
                     case'3':
-                        tile = Tile((x,y),GAMETILES["CastleHallFloorPillar"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["CastleHallFloorPillar"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["CastleHallFloorPillar"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["CastleHallFloorPillar"],'')
                         # self.tiles.add(tile)
                     case'4':
-                        tile = Tile((x,y),GAMETILES["BrickBlock"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["BrickBlock"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["BrickBlock"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["BrickBlock"],'')
                         # self.tiles.add(tile)
                     case'5':
-                        tile = Tile((x,y),GAMETILES["CastleHallFloorSupport"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["CastleHallFloorSupport"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["CastleHallFloorSupport"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["CastleHallFloorSupport"],'')
                         # self.tiles.add(tile)
                     case'6':
-                        tile = Tile((x,y),GAMETILES["ChapelFloor"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["ChapelFloor"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["ChapelFloor"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["ChapelFloor"],'')
                         # self.tiles.add(tile)
                     case'7':
-                        tile = Tile((x,y),GAMETILES["ChapelSupport"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["ChapelSupport"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["ChapelSupport"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["ChapelSupport"],'')
                         # self.tiles.add(tile)
                     case'8':
-                        tile = Tile((x,y),GAMETILES["IceFloor"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["IceFloor"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["IceFloor"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["IceFloor"],'')
                         # self.tiles.add(tile)
                     case'9':
-                        tile = Tile((x,y),GAMETILES["IceyBlock"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["IceyBlock"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["IceyBlock"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["IceyBlock"],'')
                         # self.tiles.add(tile)
                     case'10':
-                        tile = Tile((x,y),GAMETILES["DrakeGround"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["DrakeGround"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["DrakeGround"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["DrakeGround"],'')
                         # self.tiles.add(tile)
                     case'11':
-                        tile = Tile((x,y),GAMETILES["MagmaPoolBlock"])
+                        tile = MagmaPool(TILESIZE,x,y,'../assets/tiles/AnimTiles/Magmapool')
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["MagmaPoolBlock"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["MagmaPoolBlock"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["MagmaPoolBlock"],'')
                         # self.tiles.add(tile)
                     case'12':
-                        tile = Tile((x,y),GAMETILES["WonderBlockFloor"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockFloor"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["WonderBlockFloor"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockFloor"],'')
                         # self.tiles.add(tile)
                     case'13':
-                        tile = Tile((x,y),GAMETILES["WonderBlockSupport"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockSupport"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["WonderBlockSupport"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockSupport"],'')
                         # self.tiles.add(tile)
                     case'14':
-                        tile = Tile((x,y),GAMETILES["PillarBlock"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["PillarBlock"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["PillarBlock"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["PillarBlock"],'')
                         # self.tiles.add(tile)
                     case'15':
-                        tile = Tile((x,y),GAMETILES["PillarSupport"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["PillarSupport"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["PillarSupport"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["PillarSupport"],'')
                         # self.tiles.add(tile)
                     case'16':
-                        tile = Tile((x,y),GAMETILES["GhostTrainFloor"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["GhostTrainFloor"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["GhostTrainFloor"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["GhostTrainFloor"],'')
                         # self.tiles.add(tile)
                     case'17':
-                        tile = Tile((x,y),GAMETILES["HauntedPrisonFloor"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["HauntedPrisonFloor"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["HauntedPrisonFloor"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["HauntedPrisonFloor"],'')
                         # self.tiles.add(tile)
                     case'18':
-                        tile = Tile((x,y),GAMETILES["HauntedPrisonSupport"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["HauntedPrisonSupport"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["HauntedPrisonSupport"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["HauntedPrisonSupport"],'')
                         # self.tiles.add(tile)
                     case'19':
-                        tile = Tile((x,y),GAMETILES["MasterChamberFloor"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberFloor"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["MasterChamberFloor"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberFloor"],'')
                         # self.tiles.add(tile)
                     case'20':
-                        tile = Tile((x,y),GAMETILES["MasterChamberSigil"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberSigil"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["MasterChamberSigil"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberSigil"],'')
                         # self.tiles.add(tile)
                     case'21':
-                        tile = Tile((x,y),GAMETILES["MasterChamberPillarTop"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillarTop"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["MasterChamberPillarTop"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillarTop"],'')
                         # self.tiles.add(tile)
                     case'22':
-                        tile = Tile((x,y),GAMETILES["MasterChamberPillar"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillar"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["MasterChamberPillar"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillar"],'')
                         # self.tiles.add(tile)
                     case'23':
-                        tile = Tile((x,y),GAMETILES["ClassicBlock"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["ClassicBlock"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["ClassicBlock"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["ClassicBlock"],'')
                         # self.tiles.add(tile)
                     case '24':
                         self.playerSprite = Player((x,y),self.displaySurface,self.createJumpParticle)
                         # self.playerSprite.rect.inflate_ip(-15,0)
                         self.player.add(self.playerSprite)
                     case'25':
-                        tile = Tile((x,y),GAMETILES["LevelEnd"])
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
                         self.tiles.add(tile)
-                        # tile = Tile((x,y),GAMETILES["LevelEnd"])
+                        # tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
                         # self.tiles.add(tile)
                         pass
 
@@ -251,13 +250,12 @@ class Level():
         self.tiles.draw(self.displaySurface)
         self.cameraScroll()
         
-
         #player
         self.player.update()
         self.horizontalCollision()
         self.groundedCheck()
         self.verticalCollision()
+        self.player.draw(self.displaySurface)
         
         #landing particles
-        self.createLandingParticle()
-        self.player.draw(self.displaySurface)
+        # self.createLandingParticle()

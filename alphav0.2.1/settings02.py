@@ -32,7 +32,7 @@ GAMETILES = {
     'MasterChamberPillar' : pg.image.load('../assets/tiles/Master Chamber Sigil Pillar.png'),
     'MasterChamberSigil' : pg.image.load('../assets/tiles/Master Chamber Sigil Support.png'),
     'DrakeGround' : pg.image.load('../assets/tiles/Drake Ground Floor.png'),
-    'MagmaPoolBlock' : pg.image.load('../assets/tiles/Magma Pool Block.png'),
+    'MagmaPoolBlock' : '../assets/tiles/Magma Pool Block.png', #anim block
     'PillarBlock' : pg.image.load('../assets/tiles/PillarBlock.png'),
     'PillarSupport' : pg.image.load('../assets/tiles/PillarSupportBlock.png'),
     'WonderBlockFloor' : pg.image.load('../assets/tiles/Wonder Block Floor.png'),
