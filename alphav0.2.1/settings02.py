@@ -24,19 +24,19 @@ GAMETILES = {
     'CastleHallFloorSupport' : pg.image.load('../assets/tiles/CastleHallFloorSupportBlock.png'),
     'CastleHallBrickFloor' : pg.image.load('../assets/tiles/CastleHallBrickFloorBlock.png'),
     'BrickBlock' : pg.image.load('../assets/tiles/BrickBlock.png'),
-    'GhostTrainFloor' : pg.image.load('../assets/tiles/Ghost Train Floor.png'),
-    'HauntedPrisonFloor' : pg.image.load('../assets/tiles/Haunted Prison Floor.png'),
+    'GhostTrainFloor' : '../assets/tiles/AnimTiles/GhostTrain', #anim block
+    'HauntedPrisonFloor' : '../assets/tiles/AnimTiles/HauntedPrison', #anim block
     'HauntedPrisonSupport' : pg.image.load('../assets/tiles/Haunted Prison Support.png'),
-    'MasterChamberFloor' : pg.image.load('../assets/tiles/Master Chamber Floor.png'),
-    'MasterChamberPillarTop' : pg.image.load('../assets/tiles/Master Chamber Sigil Pillar Top.png'),
-    'MasterChamberPillar' : pg.image.load('../assets/tiles/Master Chamber Sigil Pillar.png'),
-    'MasterChamberSigil' : pg.image.load('../assets/tiles/Master Chamber Sigil Support.png'),
-    'DrakeGround' : pg.image.load('../assets/tiles/Drake Ground Floor.png'),
-    'MagmaPoolBlock' : '../assets/tiles/Magma Pool Block.png', #anim block
+    'MasterChamberFloor' : '../assets/tiles/AnimTiles/MasterFloor', #anim block
+    'MasterChamberPillarTop' : '../assets/tiles/AnimTiles/MastersPillarTop', #anim block
+    'MasterChamberPillar' : '../assets/tiles/AnimTiles/MastersPillar', #anim block
+    'MasterChamberSigil' : '../assets/tiles/AnimTiles/MCSigil', #anim block
+    'DrakeGround' : '../assets/tiles/AnimTiles/DrakeGround', #anim block
+    'MagmaPoolBlock' : '../assets/tiles/AnimTiles/MagmaPool', 
     'PillarBlock' : pg.image.load('../assets/tiles/PillarBlock.png'),
     'PillarSupport' : pg.image.load('../assets/tiles/PillarSupportBlock.png'),
-    'WonderBlockFloor' : pg.image.load('../assets/tiles/Wonder Block Floor.png'),
-    'WonderBlockSupport' : pg.image.load('../assets/tiles/Wonder Block Support.png'),
+    'WonderBlockFloor' : '../assets/tiles/AnimTiles/WonderBlock/', #anim block
+    'WonderBlockSupport' : '../assets/tiles/AnimTiles/WonderBlockSupport', #anim block
     'CastleHallFloorPillar' : pg.image.load('../assets/tiles/Castle Hall Floor Pillar.png'),
     'PlayerSpawn' : pg.image.load('../assets/tiles/AgravaineSpawnIcon.png'),
     'LevelEnd' : pg.image.load('../assets/tiles/LevelEndMarker.png'),

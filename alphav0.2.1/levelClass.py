@@ -1,7 +1,7 @@
 import pygame as pg, os, csv
 from settings02 import *
 from playerClass import Player
-from tileClass import Tile,MagmaPool,StaticTile
+from tileClass import Tile,AnimBlock,StaticTile
 from particles import ParticleEffect
 
 class Level():
@@ -101,23 +101,23 @@ class Level():
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["IceyBlock"],'')
                         # self.tiles.add(tile)
                     case'10':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["DrakeGround"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["DrakeGround"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["DrakeGround"],'')
                         # self.tiles.add(tile)
                     case'11':
-                        tile = MagmaPool(TILESIZE,x,y,'../assets/tiles/AnimTiles/Magmapool')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES['MagmaPoolBlock'])
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["MagmaPoolBlock"],'')
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["MagmaPoolBlock"],'')
                         # self.tiles.add(tile)
                     case'12':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockFloor"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["WonderBlockFloor"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockFloor"],'')
                         # self.tiles.add(tile)
                     case'13':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockSupport"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["WonderBlockSupport"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["WonderBlockSupport"],'')
                         # self.tiles.add(tile)
@@ -132,12 +132,12 @@ class Level():
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["PillarSupport"],'')
                         # self.tiles.add(tile)
                     case'16':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["GhostTrainFloor"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["GhostTrainFloor"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["GhostTrainFloor"],'')
                         # self.tiles.add(tile)
                     case'17':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["HauntedPrisonFloor"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["HauntedPrisonFloor"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["HauntedPrisonFloor"],'')
                         # self.tiles.add(tile)
@@ -147,22 +147,22 @@ class Level():
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["HauntedPrisonSupport"],'')
                         # self.tiles.add(tile)
                     case'19':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberFloor"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["MasterChamberFloor"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberFloor"],'')
                         # self.tiles.add(tile)
                     case'20':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberSigil"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["MasterChamberSigil"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberSigil"],'')
                         # self.tiles.add(tile)
                     case'21':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillarTop"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["MasterChamberPillarTop"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillarTop"],'')
                         # self.tiles.add(tile)
                     case'22':
-                        tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillar"],'')
+                        tile = AnimBlock(TILESIZE,x,y,GAMETILES["MasterChamberPillar"])
                         self.tiles.add(tile)
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["MasterChamberPillar"],'')
                         # self.tiles.add(tile)
