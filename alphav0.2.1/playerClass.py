@@ -118,6 +118,7 @@ class Player(pg.sprite.Sprite):
 
         if keys[pg.K_SPACE]:
             self.jump()
+
             # self.createJumpParticle(self.rect.midbottom)
 
         '''SHOW HITBOX/RECT'''
@@ -135,7 +136,7 @@ class Player(pg.sprite.Sprite):
                 self.status = 'Run'
             else:
                 self.status = 'Idle'
-
+            
     def applyGravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
