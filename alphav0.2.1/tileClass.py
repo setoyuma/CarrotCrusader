@@ -30,7 +30,6 @@ class AnimatedTile(Tile):
 		self.frames = importFolder(path)
 		self.frame_index = 0
 		self.image = self.frames[self.frame_index]
-        
 
 	def animate(self):
 		self.frame_index += self.animSpeed
@@ -44,7 +43,7 @@ class AnimatedTile(Tile):
 
 class AnimBlock(AnimatedTile):
     def __init__(self,size,x,y,path):
-        self.animSpeed = 0.15
+        self.animSpeed = 0.2
         super().__init__(size,x,y,path)
         center_x = x + int(size/2)
         center_y = y + int(size/2)

@@ -3,7 +3,6 @@ from pygame.locals import *
 from settings02 import *
 from tileClass import Tile
 from levelClass import Level
-from devLevel import LEVELMAP
 
 
 class Game():
@@ -15,7 +14,9 @@ class Game():
         # self.scaleDisplay = pg.Surface((320,175)) # 3x scaling
         self.clock = pg.time.Clock()
         # self.map = Level(LEVELMAP,self.screen)
-        self.LEVEL = self.loadMap("./TestMap1.csv")
+
+        '''Map Setup'''
+        self.LEVEL = self.loadMap(LEVELMAP)
         self.map = Level(self.LEVEL,self.scaleDisplay)
 
     def loadMap(self, path):
