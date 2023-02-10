@@ -2,6 +2,7 @@ import pygame as pg, sys
 from debug import debug
 from support import importFolder
 from pygame.locals import * 
+from settings02 import WINDOWSIZE
 # i put this here in nvim
 
 class Player(pg.sprite.Sprite):
@@ -29,7 +30,11 @@ class Player(pg.sprite.Sprite):
         self.gravity = 0.4
         self.jumpSpeed = -7
         self.airBorne = False
-        
+        self.wallJumps = 0
+
+        #player stats
+        self.hitpoints = 3
+
         #player status
         self.status = 'Idle'
         self.facingRight = True
@@ -45,6 +50,8 @@ class Player(pg.sprite.Sprite):
             'Run': [],
             'Jump': [],
             'Fall': [],
+            'WallJump': [],
+            'Damage': [],
         }
 
         for animation in self.animations.keys():
@@ -119,6 +126,7 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_SPACE]:
             self.jump()
 
+       
             # self.createJumpParticle(self.rect.midbottom)
 
         '''SHOW HITBOX/RECT'''
@@ -136,6 +144,14 @@ class Player(pg.sprite.Sprite):
                 self.status = 'Run'
             else:
                 self.status = 'Idle'
+
+        # '''WALLJUMP STATE'''
+        # if self.onGround == False and self.direction.y >= -4:
+        #     if self.onLeftWall:
+        #         self.status = 'WallJump'
+        # if self.onGround == False and self.direction.y >= -4:
+        #     if self.onRightWall:
+        #         self.status = 'WallJump'
             
     def applyGravity(self):
         self.direction.y += self.gravity
@@ -145,8 +161,25 @@ class Player(pg.sprite.Sprite):
         if self.airBorne == False:
             self.airBorne = True
             self.direction.y = self.jumpSpeed
+        
+        # '''WALLJUMP EXECUTION (currently scuffed asf)'''
+        # if self.status =="WallJump" and self.onLeftWall and self.onGround == False and self.wallJumps:
+        #         self.wallJumps -= 1
+        #         self.direction.y = self.jumpSpeed
+        #         # self.rect.x + 70
+        # if self.status =="WallJump" and self.onRightWall and self.onGround == False and self.wallJumps:
+        #         self.wallJumps -= 1
+        #         self.direction.y = self.jumpSpeed
+        #         # self.direction.x + 70
+
         else:
             self.direction.y = self.direction.y
+            if self.onGround and self.wallJumps == 0:
+                self.wallJumps += 1
+                print(self.wallJumps)
+
+    def respawn(self, pos):
+        self.rect.y,self.rect.x = pos
 
     def update(self):
         self.getInput(self.displaySurface)
