@@ -145,13 +145,13 @@ class Player(pg.sprite.Sprite):
             else:
                 self.status = 'Idle'
 
-        # '''WALLJUMP STATE'''
-        # if self.onGround == False and self.direction.y >= -4:
-        #     if self.onLeftWall:
-        #         self.status = 'WallJump'
-        # if self.onGround == False and self.direction.y >= -4:
-        #     if self.onRightWall:
-        #         self.status = 'WallJump'
+        '''WALLJUMP STATE'''
+        if self.onGround == False and self.direction.y >= -4:
+            if self.onLeftWall:
+                self.status = 'WallJump'
+        if self.onGround == False and self.direction.y >= -4:
+            if self.onRightWall:
+                self.status = 'WallJump'
             
     def applyGravity(self):
         self.direction.y += self.gravity
@@ -162,15 +162,15 @@ class Player(pg.sprite.Sprite):
             self.airBorne = True
             self.direction.y = self.jumpSpeed
         
-        # '''WALLJUMP EXECUTION (currently scuffed asf)'''
-        # if self.status =="WallJump" and self.onLeftWall and self.onGround == False and self.wallJumps:
-        #         self.wallJumps -= 1
-        #         self.direction.y = self.jumpSpeed
-        #         # self.rect.x + 70
-        # if self.status =="WallJump" and self.onRightWall and self.onGround == False and self.wallJumps:
-        #         self.wallJumps -= 1
-        #         self.direction.y = self.jumpSpeed
-        #         # self.direction.x + 70
+        '''WALLJUMP EXECUTION (currently scuffed asf)'''
+        if self.status =="WallJump" and self.onLeftWall and self.onGround == False and self.wallJumps:
+                self.wallJumps -= 1
+                self.direction.y = self.jumpSpeed
+                # self.rect.x + 70
+        if self.status =="WallJump" and self.onRightWall and self.onGround == False and self.wallJumps:
+                self.wallJumps -= 1
+                self.direction.y = self.jumpSpeed
+                # self.direction.x + 70
 
         else:
             self.direction.y = self.direction.y
