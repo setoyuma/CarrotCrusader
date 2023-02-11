@@ -10,7 +10,7 @@ class Level():
         self.DrawMap(mapData)
         self.worldShift = 0
         self.currentPlayerX = 0
-
+        self.playerToScreenOffset = 3
         #dust
         self.dustSprite = pg.sprite.GroupSingle()
 
@@ -186,7 +186,7 @@ class Level():
         player = self.player.sprite
         playerX = player.rect.centerx
         directionX = player.direction.x
-        if playerX <= (WINDOWSIZE[0]/2)/6 and directionX < 0:
+        if playerX <= (WINDOWSIZE[0]/2)/self.playerToScreenOffset and directionX < 0:
             self.worldShift = 2
             player.speed = 0
         elif playerX >= (WINDOWSIZE[0]/4) - (WINDOWSIZE[0]/8.5) and directionX > 0:
