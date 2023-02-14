@@ -2,7 +2,6 @@ import pygame as pg, sys
 from debug import debug
 from support import importFolder
 from pygame.locals import * 
-from settings02 import WINDOWSIZE
 # i put this here in nvim
 
 class Player(pg.sprite.Sprite):
@@ -55,7 +54,7 @@ class Player(pg.sprite.Sprite):
         }
 
         for animation in self.animations.keys():
-            fullPath =animPath + animation
+            fullPath = animPath + animation
             self.animations[animation] = importFolder(fullPath)
 
     def importRunParticles(self):
