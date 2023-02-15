@@ -17,5 +17,5 @@ A metroidvania being built with pygame.
 *Run The .exe Inside The Extracted Folder With the Game's Name + Version*
 *Enjoy!*
 
-# How To Leave Feedback/Report Bugs And Issues
+# How To Leave Feedback/Report Bugs And Issues:
 *Either Leave An Issue Report In The Repo Or Message ( FGPEG#2065 ) or ( Scarlet Scourge#1792 ) On Discord With Whatever The Issue/Feedback Is*
