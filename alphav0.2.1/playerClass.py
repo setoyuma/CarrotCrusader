@@ -32,7 +32,7 @@ class Player(pg.sprite.Sprite):
         self.wallJumps = 0
 
         #player stats
-        self.hitpoints = 3
+        self.hitpoints = 100
 
         #player status
         self.status = 'Idle'
@@ -124,9 +124,6 @@ class Player(pg.sprite.Sprite):
 
         if keys[pg.K_SPACE]:
             self.jump()
-
-       
-            # self.createJumpParticle(self.rect.midbottom)
 
         '''SHOW HITBOX/RECT'''
         if keys[pg.K_h]:

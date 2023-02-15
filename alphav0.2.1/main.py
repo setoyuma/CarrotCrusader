@@ -3,6 +3,7 @@ from pygame.locals import *
 from settings02 import *
 from tileClass import Tile
 from levelClass import Level
+from ui import UI
 
 
 class Game():
@@ -13,11 +14,17 @@ class Game():
         # self.scaleDisplay = pg.Surface((640,350)) # 2x scaling
         # self.scaleDisplay = pg.Surface((320,175)) # 3x scaling
         self.clock = pg.time.Clock()
-        # self.map = Level(LEVELMAP,self.screen)
+        self.BG = pg.image.load('../assets/Sky/DarkSky.png')
+        self.BG = pg.transform.scale(self.BG, (WINDOWSIZEHALF))
 
         '''Map Setup'''
         self.LEVEL = self.loadMap(LEVELMAP)
+        # self.map = Level(self.LEVEL,self.screen)
         self.map = Level(self.LEVEL,self.scaleDisplay)
+
+        '''UI SETUP'''
+        self.UI = UI(self.scaleDisplay)
+
 
     def loadMap(self, path):
         gameMap = []
@@ -31,11 +38,17 @@ class Game():
     def Run(self):
         while True:
             # self.screen.fill('black')
-            self.scaleDisplay.fill('dark red')
+            # self.scaleDisplay.fill('black')
+            self.scaleDisplay.blit(self.BG,(0,0))
             self.map.Run()
-
+            self.UI.show_health(100,100)
+            
             #event handler
             for event in pg.event.get():
+                if event.type == QUIT:
+                        print("\nGame Closed\n")
+                        pg.quit()
+                        sys.exit()
                 if event.type == KEYDOWN:
                     if event.key == K_q:
                         print("\nGame Closed\n")

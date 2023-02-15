@@ -3,6 +3,7 @@ from settings02 import *
 from playerClass import Player
 from tileClass import Tile,AnimBlock,StaticTile
 from particles import ParticleEffect
+# from SkyBox import SkyBox
 
 class Level():
     def __init__(self,mapData,surface) -> None:
@@ -10,12 +11,15 @@ class Level():
         self.DrawMap(mapData)
         self.worldShift = 0
         self.currentPlayerX = 0
-        self.playerToScreenOffset = 3
+        self.playerToScreenOffset = 4
         #dust
         self.dustSprite = pg.sprite.GroupSingle()
 
         #checks
         self.playerGrounded = False
+
+        #decoration
+        # self.sky = SkyBox(8)
 
     def createJumpParticle(self,pos):
         if self.player.sprite.facingRight:
@@ -44,6 +48,8 @@ class Level():
     def DrawMap(self,mapData):
         self.tiles = pg.sprite.Group()
         self.player = pg.sprite.GroupSingle()
+        self.BG = pg.image.load('../assets/Sky/DarkSky.png')
+        self.BG = pg.transform.scale(self.BG, (WINDOWSIZEHALF))
         for rowIndex, row in enumerate(mapData):
             for colIndex, cell in enumerate(row):
                 x = colIndex*TILESIZE
@@ -181,6 +187,48 @@ class Level():
                         # tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
                         # self.tiles.add(tile)
                         pass
+                    case'26':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["WoodFloor"],'')
+                        self.tiles.add(tile)
+                    case'27':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["TempleOfSixFloor"],'')
+                        self.tiles.add(tile)
+                    case'28':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["TempleOfSixFloorSupport"],'')
+                        self.tiles.add(tile)
+                    case'29':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["TempleOfSixFloorCracked"],'')
+                        self.tiles.add(tile)
+                    case'30':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["TempleOfSixFloorRug"],'')
+                        self.tiles.add(tile)
+                    case'31':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'32':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'33':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'34':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'35':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'36':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'37':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'38':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
+                    case'39':
+                        tile = StaticTile(TILESIZE,x,y,GAMETILES["LevelEnd"],'')
+                        self.tiles.add(tile)
 
     def cameraScroll(self):
         player = self.player.sprite
@@ -257,5 +305,8 @@ class Level():
         self.verticalCollision()
         self.player.draw(self.displaySurface)
         
+        #decoration
+        # self.sky.draw(self.displaySurface)
+
         #landing particles
         # self.createLandingParticle()

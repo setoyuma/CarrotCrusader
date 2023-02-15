@@ -1,18 +1,19 @@
 import pygame as pg
-gameIcon = pg.image.load('../assets/tiles/gameIcon.ico')
+gameIcon = pg.image.load('../assets/gameIcon.ico')
 # WINDOW_SIZE = (1000,700)
-WINDOWSIZE = (1080,720)
+WINDOWSIZE = (1200,1000)
+WINDOWSIZEHALF = (600,360)
 CAPTION = pg.display.set_caption('Carrot Crusader')
+ICON = pg.display.set_icon(pg.image.load('../assets/gameIcon.png'))
 CLOCK = pg.time.Clock()
-SCREEN = pg.display.set_mode(WINDOWSIZE,0,32) # initiate the window
-DISPLAY = pg.Surface((300,200)) # used as the surface for rendering, which is scaled
+SCREEN = pg.display.set_mode(WINDOWSIZE) # initiate the window
+# DISPLAY = pg.Surface((300,200)) # used as the surface for rendering, which is scaled 3x
+# DISPLAY = pg.Surface((480,288)) # used as the surface for rendering, which is scaled 2.5x
+DISPLAY = pg.Surface((440,362)) # used as the surface for rendering, which is scaled 2.75x
 TILESIZE = 16
 FPS = 60
-LEVELMAP = './TestMap1.csv'
+LEVELMAP = '../assets/map/TestMap.csv'
 # LEVELMAP = '../map/WIPMAP.csv'
-TRUESCROLL = [0,0]
-jumping = False
-DEVMODE = False
 '''TILE DICTIONARY'''
 GAMETILES = {
     'BreakableBlock' : pg.image.load('../assets/tiles/BreakableBlock.png'),
@@ -41,4 +42,9 @@ GAMETILES = {
     'CastleHallFloorPillar' : pg.image.load('../assets/tiles/Castle Hall Floor Pillar.png'),
     'PlayerSpawn' : pg.image.load('../assets/tiles/AgravaineSpawnIcon.png'),
     'LevelEnd' : pg.image.load('../assets/tiles/LevelEndMarker.png'),
+    'WoodFloor' : pg.image.load('../assets/tiles/WoodFloor.png'),
+    'TempleOfSixFloor' : pg.image.load('../assets/tiles/TempleOfSixFloor.png'),
+    'TempleOfSixFloorSupport' : pg.image.load('../assets/tiles/TempleOfSixFloorSupport.png'),
+    'TempleOfSixFloorCracked' : pg.image.load('../assets/tiles/TempleOfSixFloorCracked.png'),
+    'TempleOfSixFloorRug' : pg.image.load('../assets/tiles/TempleOfSixFloorRug.png'),
 }
