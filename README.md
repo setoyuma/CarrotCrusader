@@ -1,7 +1,7 @@
 # CarrotCrusader
 A metroidvania being built with pygame.
 
-**CURRENT TEST VERSION  ( alphav0.3.1 )  **
+**CURRENT TEST VERSION  ( alphav0.3.1 )**
 
 # CONTROLS:
 *W,A,S,D to move*
