@@ -1,7 +1,8 @@
 import pygame as pg
 gameIcon = pg.image.load('../assets/gameIcon.ico')
 # WINDOW_SIZE = (1000,700)
-WINDOWSIZE = (1200,1000)
+WINDOWSIZE = (1000,700)
+# WINDOWSIZE = (1200,1000)
 WINDOWSIZEHALF = (600,360)
 CAPTION = pg.display.set_caption('Carrot Crusader')
 ICON = pg.display.set_icon(pg.image.load('../assets/gameIcon.png'))
