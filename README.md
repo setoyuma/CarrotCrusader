@@ -11,7 +11,7 @@ A metroidvania being built with pygame.
 
 
 # How To Test:
-*Go To The Folder That Matches The Current Test Version ( listed above ) *
+*Go To The Folder That Matches The Current Test Version ( listed above )*
 *Download The Zip Folder*
 *Extract It Somewhere You Want It*
 *Run The .exe Inside The Extracted Folder With the Game's Name + Version*
