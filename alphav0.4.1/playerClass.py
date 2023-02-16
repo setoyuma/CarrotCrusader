@@ -11,6 +11,7 @@ class Player(pg.sprite.Sprite):
         self.displaySurface = surf
         self.animationSpeed = .25
         self.frameIndex = 0
+        self.pos = pos
         self.image = self.animations['Idle'][self.frameIndex]
         self.rect = pg.rect.Rect(pos[0],pos[1],22,29)
         # self.rect.inflate_ip(-15,0)
@@ -41,6 +42,7 @@ class Player(pg.sprite.Sprite):
         self.onCeiling = False
         self.onLeftWall = False
         self.onRightWall = False
+        self.attacking = False
 
     def importAssets(self):
         animPath = '../assets/Player/'
@@ -51,6 +53,7 @@ class Player(pg.sprite.Sprite):
             'Fall': [],
             'WallJump': [],
             'Damage': [],
+            'GroundAttack': [],
         }
 
         for animation in self.animations.keys():
@@ -77,17 +80,23 @@ class Player(pg.sprite.Sprite):
               
         #set rect
         if self.onGround and self.onRightWall:
+            # self.rect = pg.rect.Rect(self.pos[0],self.pos[1],22,29)
             self.rect = self.image.get_rect(bottomright=self.rect.bottomright)
         elif self.onGround and self.onLeftWall:
+            # self.rect = pg.rect.Rect(self.pos[0],self.pos[1],22,29)
             self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
         elif self.onGround:
+            # self.rect = pg.rect.Rect(self.pos[0],self.pos[1],22,29)
             self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
         
         elif self.onCeiling and self.onRightWall:
+            # self.rect = pg.rect.Rect(self.pos[0],self.pos[1],22,29)
             self.rect = self.image.get_rect(topright=self.rect.topright)
         elif self.onCeiling and self.onLeftWall:
+            # self.rect = pg.rect.Rect(self.pos[0],self.pos[1],22,29)
             self.rect = self.image.get_rect(topleft=self.rect.topleft)
         elif self.onCeiling:
+            # self.rect = pg.rect.Rect(self.pos[0],self.pos[1],22,29)
             self.rect = self.image.get_rect(midtop=self.rect.midtop)
 
     def runningParticlesAnimator(self):
@@ -129,7 +138,16 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_h]:
             print('hitbox view')
             self.showHitBoxes(surf,self)
-
+        
+        '''ATTACKS'''
+        if self.onGround and keys[pg.K_o]:
+            self.attacking = True
+            self.direction.x = 0
+            self.direction.y = 0
+        else:
+            self.attacking = False
+            
+    
     def getState(self):
         if self.direction.y < 0:
             self.status = 'Jump'
@@ -140,6 +158,13 @@ class Player(pg.sprite.Sprite):
                 self.status = 'Run'
             else:
                 self.status = 'Idle'
+
+        '''ATTACK STATE'''
+        if self.attacking:
+            self.status = 'GroundAttack'
+            self.image = self.animations[self.status]
+        else:
+            self.image = self.image
 
         # '''WALLJUMP STATE'''
         # if self.onGround == False and self.direction.y >= -4:

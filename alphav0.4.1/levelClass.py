@@ -1,5 +1,5 @@
 import pygame as pg, os, csv
-from settings02 import *
+from settings import *
 from playerClass import Player
 from tileClass import Tile,AnimBlock,StaticTile
 from particles import ParticleEffect

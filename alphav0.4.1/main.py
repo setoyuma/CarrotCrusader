@@ -1,6 +1,6 @@
 import pygame as pg,sys,csv,os
 from pygame.locals import *
-from settings02 import *
+from settings import *
 from tileClass import Tile
 from levelClass import Level
 from ui import UI
