@@ -120,12 +120,12 @@ class Player(pg.sprite.Sprite):
 	def get_status(self):
 		if self.direction.y < 0:
 			self.status = 'jump'
-		elif self.direction.y > 1:
+		elif self.direction.y > 1 and self.on_ground == False:
 			self.status = 'fall'
+		elif self.direction.x != 0 and self.on_ground:
+			self.status = 'run'
 		else:
-			if self.direction.x != 0 and self.on_ground:
-				self.status = 'run'
-			else:
+			if self.direction.y == 0 and self.on_ground:
 				self.status = 'idle'
 
 	def apply_gravity(self):
