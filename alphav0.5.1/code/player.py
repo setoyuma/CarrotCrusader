@@ -123,7 +123,7 @@ class Player(pg.sprite.Sprite):
 		elif self.direction.y > 1:
 			self.status = 'fall'
 		else:
-			if self.direction.x != 0:
+			if self.direction.x != 0 and self.on_ground:
 				self.status = 'run'
 			else:
 				self.status = 'idle'
