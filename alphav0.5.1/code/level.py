@@ -24,6 +24,7 @@ class Level:
 		player_layout = import_csv_layout(self.level_data['player'])
 		self.playerSpriteGroup = pg.sprite.GroupSingle()
 		self.goal = pg.sprite.GroupSingle()
+		self.goBack = pg.sprite.GroupSingle()
 		self.player_setup(player_layout)
 
 		#UI
@@ -95,6 +96,10 @@ class Level:
 					hat_surface = pg.image.load('../graphics/character/hat.png').convert_alpha()
 					sprite = StaticTile(tile_size,x,y,hat_surface)
 					self.goal.add(sprite)
+				if val == '2':
+					hat_surface = pg.image.load('../graphics/character/hat.png').convert_alpha()
+					sprite = StaticTile(tile_size,x,y,hat_surface)
+					self.goBack.add(sprite)
 
 	def enemy_collision_reverse(self):
 		for enemy in self.enemy_sprites.sprites():
@@ -245,8 +250,11 @@ class Level:
 		self.scroll_x()
 		self.playerSpriteGroup.draw(self.display_surface)
 		self.goal.update(self.world_shift)
+		self.goBack.update(self.world_shift)
 		self.goal.draw(self.display_surface)
+		self.goBack.draw(self.display_surface)
 
 		#UI
 		self.UI.show_health(self.Player.hp,100)
 
+		
