@@ -1,5 +1,6 @@
 import pygame as pg, sys 
 from support import import_folder
+from settings import screen_height
 
 class Player(pg.sprite.Sprite):
 	def __init__(self,pos,surface,create_jump_particles):
@@ -8,7 +9,7 @@ class Player(pg.sprite.Sprite):
 		self.frame_index = 0
 		self.image = self.animations['idle'][self.frame_index]
 		self.rect = self.image.get_rect(topleft = pos)
-		self.animation_speed = 0.20
+		self.animation_speed = 0.20	
 		
 		# dust particles 
 		self.import_dust_run_particles()
@@ -23,6 +24,10 @@ class Player(pg.sprite.Sprite):
 		self.gravity = 0.6
 		self.jump_speed = -14
 
+		#respawn
+		self.spawnX = pos[0]
+		self.spawnY = pos[1]
+		
 		# player status
 		self.status = 'idle'
 		self.facing_right = True
@@ -30,7 +35,8 @@ class Player(pg.sprite.Sprite):
 		self.on_ceiling = False
 		self.on_left = False
 		self.on_right = False
-		
+		self.hitBoxOn = False
+
 		#health mgmt
 		self.hitStatus = False
 		self.hp = 100
@@ -52,7 +58,7 @@ class Player(pg.sprite.Sprite):
 
 	def animate(self):
 		animation = self.animations[self.status]
-		self.hitBox = pg.rect.Rect(self.rect.x,self.rect.y,38,64,)
+		self.hitBox = pg.rect.Rect(self.rect.x,self.rect.y,38,64)
 		self.hitBox.center = self.rect.center
 		# loop over frame index 
 		self.frame_index += self.animation_speed
@@ -103,6 +109,7 @@ class Player(pg.sprite.Sprite):
 				self.display_surface.blit(flipped_dust_particle,pos)
 
 	def showHitbox(self,target):
+		self.hitBoxOn = True
 		pg.draw.rect(self.display_surface,'blue',target.rect)
 		pg.draw.rect(self.display_surface,'green',target.hitBox)
 
@@ -124,6 +131,8 @@ class Player(pg.sprite.Sprite):
 
 		if keys[pg.K_h]:
 			self.showHitbox(self)
+		else:
+			self.hitBoxOn = False
 
 	def get_status(self):
 		if self.direction.y < 0:
@@ -156,6 +165,12 @@ class Player(pg.sprite.Sprite):
 				self.invincible = False
 
 	def update(self):
+		#respawn
+		# if self.rect.y > 714:
+		# 	print(self.rect.y)
+		# 	self.rect.x = self.spawnX + self.rect.x
+		# 	self.rect.y = self.spawnY 
+
 		self.get_input()
 		self.get_status()
 		self.animate()
@@ -163,4 +178,4 @@ class Player(pg.sprite.Sprite):
 		self.iFrameTimer()
 		# print('player rect y: ',self.rect.y,'\n')
 		# print('player rect x: ',self.rect.x,'\n')
-		
+		print(self.spawnX,self.spawnY)

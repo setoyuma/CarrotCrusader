@@ -19,7 +19,6 @@ class Level:
 		self.currentLevel = 0
 		self.level_data = level_data
 
-
 		# player 
 		player_layout = import_csv_layout(self.level_data['player'])
 		self.playerSpriteGroup = pg.sprite.GroupSingle()
@@ -256,5 +255,9 @@ class Level:
 
 		#UI
 		self.UI.show_health(self.Player.hp,100)
+
+
+		#respawn
+
 
 		
