@@ -3,10 +3,13 @@ from tiles import AnimatedTile
 from random import randint
 
 class Enemy(AnimatedTile):
-	def __init__(self,size,x,y):
-		super().__init__(size,x,y,'../graphics/enemy/run')
+	def __init__(self,size,x,y,surf,type):
+		super().__init__(size,x,y,f'../graphics/enemy/{type}/run')
 		self.rect.y += size - self.image.get_size()[1]
+		# self.rect = self.image.get_rect()
 		self.speed = 2
+		self.displaySurface = surf
+		
 		# self.speed = randint(3,5)
 
 	def move(self):
@@ -20,7 +23,16 @@ class Enemy(AnimatedTile):
 		self.speed *= -1
 
 	def update(self,shift):
+		self.hitBox = pg.rect.Rect(self.rect.x,self.rect.y,38,64)
+		self.hitBox.center = self.rect.center
+		self.hitBox.inflate_ip(-13.5,10)
+		# self.rect = self.hitBox
 		self.rect.x += shift
 		self.animate()
 		self.move()
 		self.reverse_image()
+
+		#show hitbox
+		# pg.draw.rect(self.displaySurface,'purple',self.hitBox)
+		# pg.draw.rect(self.displaySurface,'red',self.rect)
+		

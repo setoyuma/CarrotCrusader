@@ -1,4 +1,4 @@
-import pygame as pg 
+import pygame as pg, sys 
 from support import import_folder
 
 class Player(pg.sprite.Sprite):
@@ -6,11 +6,10 @@ class Player(pg.sprite.Sprite):
 		super().__init__()
 		self.import_character_assets()
 		self.frame_index = 0
-		self.animation_speed = 0.15
 		self.image = self.animations['idle'][self.frame_index]
 		self.rect = self.image.get_rect(topleft = pos)
-		self.hitBox = pg.rect.Rect(self.rect.x+15,self.rect.y+10,64,64,)
-		self.hitBox.center = self.rect.center
+		self.animation_speed = 0.20
+		
 		# dust particles 
 		self.import_dust_run_particles()
 		self.dust_frame_index = 0
@@ -20,8 +19,8 @@ class Player(pg.sprite.Sprite):
 
 		# player movement
 		self.direction = pg.math.Vector2(0,0)
-		self.speed = 4
-		self.gravity = 0.8
+		self.speed = 5
+		self.gravity = 0.6
 		self.jump_speed = -14
 
 		# player status
@@ -31,6 +30,14 @@ class Player(pg.sprite.Sprite):
 		self.on_ceiling = False
 		self.on_left = False
 		self.on_right = False
+		
+		#health mgmt
+		self.hitStatus = False
+		self.hp = 100
+		self.invincible = False
+		self.invincibilityDuration = 800
+		self.hurtTime = 0
+
 
 	def import_character_assets(self):
 		character_path = '../graphics/character/'
@@ -45,7 +52,8 @@ class Player(pg.sprite.Sprite):
 
 	def animate(self):
 		animation = self.animations[self.status]
-
+		self.hitBox = pg.rect.Rect(self.rect.x,self.rect.y,38,64,)
+		self.hitBox.center = self.rect.center
 		# loop over frame index 
 		self.frame_index += self.animation_speed
 		if self.frame_index >= len(animation):
@@ -96,7 +104,7 @@ class Player(pg.sprite.Sprite):
 
 	def showHitbox(self,target):
 		pg.draw.rect(self.display_surface,'blue',target.rect)
-		# pg.draw.rect(self.display_surface,'green',target.hitBox)
+		pg.draw.rect(self.display_surface,'green',target.hitBox)
 
 	def get_input(self):
 		keys = pg.key.get_pressed()
@@ -135,9 +143,24 @@ class Player(pg.sprite.Sprite):
 	def jump(self):
 		self.direction.y = self.jump_speed
 
+	def getDamage(self):
+		if not self.invincible:
+			self.hp -= 10
+			self.invincible = True
+			self.hurtTime = pg.time.get_ticks()
+
+	def iFrameTimer(self):
+		if self.invincible:
+			currentTime = pg.time.get_ticks()
+			if currentTime - self.hurtTime >= self.invincibilityDuration:
+				self.invincible = False
+
 	def update(self):
 		self.get_input()
 		self.get_status()
 		self.animate()
 		self.run_dust_animation()
+		self.iFrameTimer()
+		# print('player rect y: ',self.rect.y,'\n')
+		# print('player rect x: ',self.rect.x,'\n')
 		
