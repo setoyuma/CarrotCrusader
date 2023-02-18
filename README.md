@@ -8,6 +8,7 @@ A metroidvania being built with pygame.
 *Space to jump*
 *Hold 'H' to show player hitbox*
 *Press 'Q' or click the red 'X' to close the game*
+*Press 'R' to Reset Game*
 
 
 # How To Test:
