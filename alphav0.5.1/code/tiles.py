@@ -7,8 +7,9 @@ class Tile(pg.sprite.Sprite):
 		self.image = pg.Surface((size,size))
 		self.rect = self.image.get_rect(topleft = (x,y))
 
-	def update(self,shift):
-		self.rect.x += shift
+	def update(self,shiftx,shifty):
+		self.rect.x += shiftx
+		self.rect.y += shifty
 
 class StaticTile(Tile):
 	def __init__(self,size,x,y,surface):
@@ -34,9 +35,10 @@ class AnimatedTile(Tile):
 			self.frame_index = 0
 		self.image = self.frames[int(self.frame_index)]
 
-	def update(self,shift):
+	def update(self,shiftx,shifty):
 		self.animate()
-		self.rect.x += shift
+		self.rect.x += shiftx
+		self.rect.y += shifty
 
 class Coin(AnimatedTile):
 	def __init__(self,size,x,y,path):

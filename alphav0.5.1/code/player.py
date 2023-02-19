@@ -1,6 +1,6 @@
 import pygame as pg, sys 
 from support import import_folder
-from settings import screen_height
+
 
 class Player(pg.sprite.Sprite):
 	def __init__(self,pos,surface,create_jump_particles):
@@ -44,6 +44,9 @@ class Player(pg.sprite.Sprite):
 		self.invincibilityDuration = 800
 		self.hurtTime = 0
 
+
+		#attacks
+		self.groundAttack = False
 
 	def import_character_assets(self):
 		character_path = '../graphics/character/'
@@ -134,6 +137,22 @@ class Player(pg.sprite.Sprite):
 		else:
 			self.hitBoxOn = False
 
+		if keys[pg.K_p]:
+			font = pg.font.Font(None,64)
+			text = font.render("Ground Attack",False,'white','black')
+			textPos = text.get_rect(centerx=self.display_surface.get_width()/2, y=10)
+			self.display_surface.blit(text,textPos)
+
+			'''make atk hitbox'''
+			self.groundAttack = True
+			self.attackBox = pg.rect.Rect(self.rect.right,(self.rect.top+25),50,20)
+			self.rect.union(self.attackBox)
+			pg.draw.rect(self.display_surface,'pink',self.attackBox)
+		else:
+			self.groundAttack = False
+
+		
+
 	def get_status(self):
 		if self.direction.y < 0:
 			self.status = 'jump'
@@ -178,4 +197,4 @@ class Player(pg.sprite.Sprite):
 		self.iFrameTimer()
 		# print('player rect y: ',self.rect.y,'\n')
 		# print('player rect x: ',self.rect.x,'\n')
-		print(self.spawnX,self.spawnY)
+		

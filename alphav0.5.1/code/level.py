@@ -8,16 +8,22 @@ from player import Player
 from particles import ParticleEffect
 from ui import UI
 from game_data import levels
+from Camera import Camera
+
 
 class Level:
 	def __init__(self,level_data,surface):
 		# general setup
 		self.display_surface = surface
-		self.world_shift = 0
+		self.world_shiftx = 0
+		self.world_shifty = 0
 		self.current_x = None
 		self.gameLevels = levels
 		self.currentLevel = 0
 		self.level_data = level_data
+
+		#camera
+		self.camera = Camera()
 
 		# player 
 		player_layout = import_csv_layout(self.level_data['player'])
@@ -120,6 +126,16 @@ class Level:
 						else:	#player damage step
 							target.getDamage()
 
+
+	def enemyGotHit(self,target):
+		for enemy in self.enemy_sprites.sprites():
+			if target.groundAttack and pg.Rect.colliderect(target.attackBox,enemy.hitBox):
+				print('enemy hit by player attack')
+
+			else:
+				pass
+
+
 	# def enemyHit(self,target):
 	# 	for enemy in self.enemy_sprites.sprites():
 	# 		if pg.Rect.colliderect(enemy.hitBox, target.hitBox):
@@ -184,15 +200,31 @@ class Level:
 		player_x = player.rect.centerx
 		direction_x = player.direction.x
 
-		if player_x < screen_width / 4 and direction_x < 0:
-			self.world_shift = 5
+		if player_x < self.camera.camera_rect.left + (screen_width / 4) and direction_x < 0:
+		# if player_x < screen_width / 4 and direction_x < 0:
+			self.world_shiftx = 5
 			player.speed = 0
-		elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
-			self.world_shift = -5
+		elif player_x > self.camera.camera_rect.right - (screen_width / 4) and direction_x > 0:
+		# elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
+			self.world_shiftx = -5
 			player.speed = 0
 		else:
-			self.world_shift = 0
+			self.world_shiftx = 0
 			player.speed = 5
+	
+	# def scroll_y(self):
+	# 	player = self.Player
+	# 	if player.rect.y < (screen_height/3):
+	# 		print('scroll down')
+	# 		self.world_shifty = 5
+	# 		player.rect.y  -= 5
+	# 	elif player.rect.y > (screen_height-100):
+	# 		print('scroll up')
+	# 		self.world_shifty = -5
+	# 		player.rect.y  += 5
+	# 	else:
+	# 		self.world_shifty = 0
+			
 
 	def get_player_on_ground(self):
 		if self.playerSpriteGroup.sprite.on_ground:
@@ -216,11 +248,11 @@ class Level:
 		# self.sky.draw(self.display_surface)
 		
 		# background palms
-		self.bg_pillar_sprites.update(self.world_shift)
+		self.bg_pillar_sprites.update(self.world_shiftx,self.world_shifty)
 		self.bg_pillar_sprites.draw(self.display_surface) 
 
 		# terrain 
-		self.terrain_sprites.update(self.world_shift)
+		self.terrain_sprites.update(self.world_shiftx,self.world_shifty)
 		self.terrain_sprites.draw(self.display_surface)
 		
 		# player sprites
@@ -232,32 +264,36 @@ class Level:
 		self.create_landing_dust()
 
 		# enemy 
-		self.enemy_sprites.update(self.world_shift)
-		self.constraint_sprites.update(self.world_shift)
+		self.enemy_sprites.update(self.world_shiftx,self.world_shifty)
+		self.constraint_sprites.update(self.world_shiftx,self.world_shifty)
 		self.check_enemy_collisions(self.Player)
 		# self.enemyHit(self.Player)
 		# self.constraint_sprites.draw(self.display_surface)
 		self.enemy_collision_reverse()
 		self.enemy_sprites.draw(self.display_surface)
-		self.explosion_sprites.update(self.world_shift)
+		self.explosion_sprites.update(self.world_shiftx,self.world_shifty)
 		self.explosion_sprites.draw(self.display_surface)
 
 		# dust particles 
-		self.dust_sprite.update(self.world_shift)
+		self.dust_sprite.update(self.world_shiftx,self.world_shifty)
 		self.dust_sprite.draw(self.display_surface)
 
 		self.scroll_x()
+		# self.scroll_y()
 		self.playerSpriteGroup.draw(self.display_surface)
-		self.goal.update(self.world_shift)
-		self.goBack.update(self.world_shift)
+		self.goal.update(self.world_shiftx,self.world_shifty)
+		self.goBack.update(self.world_shiftx,self.world_shifty)
 		self.goal.draw(self.display_surface)
 		self.goBack.draw(self.display_surface)
 
 		#UI
 		self.UI.show_health(self.Player.hp,100)
 
+		#camera
+		self.camera.custom_draw(self.Player)
+		self.camera.update()
 
-		#respawn
-
+		#check if player attacked enemy
+		self.enemyGotHit(self.Player)
 
 		

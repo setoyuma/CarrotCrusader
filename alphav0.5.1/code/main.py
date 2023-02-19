@@ -14,12 +14,14 @@ def main():
 	level = Level(levels[currentLevel],screen)
 	ui = UI(screen)
 	BG = pg.image.load('../graphics/decoration/sky/DarkSky.png')
-	font = pg.font.Font('../graphics/UI/ARCADEPI.ttf',30)
+
 	
 	while True:
 		if level.Player.hp == 0:
-				# loseBar = font.render('You Lose',True,'yellow','black')
-				# screen.blit(loseBar,(screen_width/2,screen_height/2),level.Player.rect)
+				font = pg.font.Font(None,30)
+				loseBar = font.render('You Lose',True,'yellow','black')
+				loseBarRect = loseBar.get_rect(centerx=screen.get_width()/2, y=10)
+				screen.blit(loseBar,loseBarRect)
 				print('\n You Lose \n')
 				# pg.quit()
 				# sys.exit()
@@ -53,6 +55,8 @@ def main():
 				level.wentBack = True
 				level = Level(levels[currentLevel],screen)
 				print('current level',currentLevel)
+		
+		
 		for event in pg.event.get():
 			if event.type == pg.QUIT:
 				print('\n Game Closed \n')

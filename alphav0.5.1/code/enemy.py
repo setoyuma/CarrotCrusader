@@ -22,12 +22,13 @@ class Enemy(AnimatedTile):
 	def reverse(self):
 		self.speed *= -1
 
-	def update(self,shift):
+	def update(self,shiftx,shifty):
 		self.hitBox = pg.rect.Rect(self.rect.x,self.rect.y,38,64)
 		self.hitBox.center = self.rect.center
 		self.hitBox.inflate_ip(-13.5,10)
 		# self.rect = self.hitBox
-		self.rect.x += shift
+		self.rect.x += shiftx
+		self.rect.x += shifty
 		self.animate()
 		self.move()
 		self.reverse_image()

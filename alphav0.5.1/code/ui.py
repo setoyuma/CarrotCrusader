@@ -10,7 +10,7 @@ class UI:
 		# health 
 		self.health_bar = pg.image.load('../graphics/UI/HealthBar/HealthBar.png').convert_alpha()
 		self.health_bar_topleft = (0,0)
-		self.bar_max_width = 222
+		self.bar_max_width = 166
 		self.bar_height = 24
 
 		# # coins 
@@ -21,8 +21,8 @@ class UI:
 	def show_health(self,current,full):
 		current_health_ratio = current / full
 		current_bar_width = self.bar_max_width * current_health_ratio
-		health_bar_rect = pg.Rect((self.health_bar_topleft[0]+20,self.health_bar_topleft[1]+34),(current_bar_width,self.bar_height))
-		pg.draw.rect(self.display_surface,'red',health_bar_rect)
+		health_bar_rect = pg.Rect((self.health_bar_topleft[0]+74,self.health_bar_topleft[1]+34),(current_bar_width,self.bar_height))
+		pg.draw.rect(self.display_surface,'red',health_bar_rect,0,1)
 		self.display_surface.blit(self.health_bar,self.health_bar_topleft)
 
 	# def show_coins(self,amount):
