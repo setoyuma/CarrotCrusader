@@ -1,6 +1,6 @@
 import pygame as pg, sys 
 from support import import_folder
-
+from settings import *
 
 class Player(pg.sprite.Sprite):
 	def __init__(self,pos,surface,create_jump_particles):
@@ -10,7 +10,7 @@ class Player(pg.sprite.Sprite):
 		self.image = self.animations['idle'][self.frame_index]
 		self.rect = self.image.get_rect(topleft = pos)
 		self.animation_speed = 0.20	
-		
+
 		# dust particles 
 		self.import_dust_run_particles()
 		self.dust_frame_index = 0
@@ -47,10 +47,11 @@ class Player(pg.sprite.Sprite):
 
 		#attacks
 		self.groundAttack = False
+		self.attackBox = pg.rect.Rect(screen_width,screen_height,0,0)
 
 	def import_character_assets(self):
 		character_path = '../graphics/character/'
-		self.animations = {'idle':[],'run':[],'jump':[],'fall':[]}
+		self.animations = {'idle':[],'run':[],'jump':[],'fall':[],'attack':[]}
 
 		for animation in self.animations.keys():
 			full_path = character_path + animation
@@ -145,11 +146,18 @@ class Player(pg.sprite.Sprite):
 
 			'''make atk hitbox'''
 			self.groundAttack = True
-			self.attackBox = pg.rect.Rect(self.rect.right,(self.rect.top+25),50,20)
-			self.rect.union(self.attackBox)
-			pg.draw.rect(self.display_surface,'pink',self.attackBox)
+			if self.facing_right:
+				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),50,30)
+				self.rect.union(self.attackBox)
+				pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,-1,5,-1,5)
+			
+			elif self.facing_right == False:
+				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),-50,30)
+				self.rect.union(self.attackBox)
+				pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,5,-1,5,-1)
 		else:
 			self.groundAttack = False
+			self.attackBox = pg.rect.Rect(0,0,0,0)
 
 		
 
@@ -163,6 +171,14 @@ class Player(pg.sprite.Sprite):
 		else:
 			if self.direction.y == 0 and self.on_ground:
 				self.status = 'idle'
+
+		if self.groundAttack:
+			self.status = 'attack'
+			if self.on_ground:
+				self.speed = 0
+			else:
+				self.speed = 4
+
 
 	def apply_gravity(self):
 		self.direction.y += self.gravity
@@ -184,6 +200,8 @@ class Player(pg.sprite.Sprite):
 				self.invincible = False
 
 	def update(self):
+		# pg.draw.rect(self.display_surface,'pink',self.attackBox)
+
 		#respawn
 		# if self.rect.y > 714:
 		# 	print(self.rect.y)

@@ -116,6 +116,7 @@ class Level:
 					enemy_center = enemy.hitBox.centery
 					enemy_top = enemy.hitBox.top
 					player_bottom = target.hitBox.bottom
+
 					if pg.Rect.colliderect(enemy.hitBox, target.hitBox):
 						if enemy_top < player_bottom < enemy_center and target.direction.y >= 0:
 							# self.stomp_sound.play()
@@ -125,6 +126,12 @@ class Level:
 							enemy.kill()
 						else:	#player damage step
 							target.getDamage()
+
+					if pg.Rect.colliderect(enemy.hitBox,target.attackBox):
+						print('player hit enemy with attack')
+						explosion_sprite = ParticleEffect(enemy.hitBox.center,'explosion')
+						self.explosion_sprites.add(explosion_sprite)
+						enemy.kill()
 
 
 	def enemyGotHit(self,target):
@@ -201,12 +208,12 @@ class Level:
 		direction_x = player.direction.x
 
 		# if player_x < self.camera.camera_rect.left + (screen_width / 4) and direction_x < 0:
-		if player_x < screen_width / 4 and direction_x < 0:
-			self.world_shiftx = 5
+		if player_x < screen_width / 2 and direction_x < 0:
+			self.world_shiftx = 6
 			player.speed = 0
 		# elif player_x > self.camera.camera_rect.right - (screen_width / 4) and direction_x > 0:
-		elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
-			self.world_shiftx = -5
+		elif player_x > screen_width - (screen_width / 2) and direction_x > 0:
+			self.world_shiftx = -6
 			player.speed = 0
 		else:
 			self.world_shiftx = 0
