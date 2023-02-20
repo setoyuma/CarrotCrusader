@@ -200,17 +200,17 @@ class Level:
 		player_x = player.rect.centerx
 		direction_x = player.direction.x
 
-		if player_x < self.camera.camera_rect.left + (screen_width / 4) and direction_x < 0:
-		# if player_x < screen_width / 4 and direction_x < 0:
+		# if player_x < self.camera.camera_rect.left + (screen_width / 4) and direction_x < 0:
+		if player_x < screen_width / 4 and direction_x < 0:
 			self.world_shiftx = 5
 			player.speed = 0
-		elif player_x > self.camera.camera_rect.right - (screen_width / 4) and direction_x > 0:
-		# elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
+		# elif player_x > self.camera.camera_rect.right - (screen_width / 4) and direction_x > 0:
+		elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
 			self.world_shiftx = -5
 			player.speed = 0
 		else:
 			self.world_shiftx = 0
-			player.speed = 5
+			player.speed = 6
 	
 	# def scroll_y(self):
 	# 	player = self.Player

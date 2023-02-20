@@ -2,7 +2,7 @@ import pygame as pg, sys
 from settings import * 
 from level import Level
 from game_data import levels
-from pygame.locals import *
+from pygame.locals import KEYDOWN
 from ui import UI
 def main():
 	# pg setup
@@ -65,11 +65,11 @@ def main():
 				pg.quit()
 				sys.exit()
 			if event.type == KEYDOWN:
-				if event.key == K_q:
+				if event.key == pg.K_q:
 					print('\n Game Closed \n')
 					pg.quit()
 					sys.exit()
-				if event.key == K_r:
+				if event.key == pg.K_r:
 					print('\n Game Restarting... \n')
 					main()
 			

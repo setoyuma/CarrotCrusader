@@ -20,9 +20,9 @@ class Player(pg.sprite.Sprite):
 
 		# player movement
 		self.direction = pg.math.Vector2(0,0)
-		self.speed = 5
-		self.gravity = 0.6
-		self.jump_speed = -14
+		self.speed = 6
+		self.gravity = 0.5
+		self.jump_speed = -13.5
 
 		#respawn
 		self.spawnX = pos[0]
