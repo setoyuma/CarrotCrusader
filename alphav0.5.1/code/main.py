@@ -9,6 +9,8 @@ def main():
 	pg.init()
 	print('\n Game Loaded \n')
 	screen = pg.display.set_mode((screen_width,screen_height))
+	pg.display.set_caption("Carrot Crusader")
+	pg.display.set_icon(GAMEICON)
 	clock = pg.time.Clock()
 	currentLevel = 1
 	level = Level(levels[currentLevel],screen)

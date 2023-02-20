@@ -1,5 +1,7 @@
 import pygame as pg
 
+GAMEICON = pg.image.load('../graphics/gameicon.ico')
+
 vertical_tile_number = 22
 tile_size = 32
 
