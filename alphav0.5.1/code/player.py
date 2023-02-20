@@ -149,12 +149,12 @@ class Player(pg.sprite.Sprite):
 			if self.facing_right:
 				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),50,30)
 				self.rect.union(self.attackBox)
-				pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,-1,5,-1,5)
+				# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,-1,5,-1,5)
 			
 			elif self.facing_right == False:
 				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),-50,30)
 				self.rect.union(self.attackBox)
-				pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,5,-1,5,-1)
+				# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,5,-1,5,-1)
 		else:
 			self.groundAttack = False
 			self.attackBox = pg.rect.Rect(0,0,0,0)
