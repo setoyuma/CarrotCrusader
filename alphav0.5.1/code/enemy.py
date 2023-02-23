@@ -28,7 +28,7 @@ class Enemy(AnimatedTile):
 		self.hitBox.inflate_ip(-13.5,10)
 		# self.rect = self.hitBox
 		self.rect.x += shiftx
-		self.rect.x += shifty
+		self.rect.y += shifty
 		self.animate()
 		self.move()
 		self.reverse_image()

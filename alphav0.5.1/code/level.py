@@ -11,6 +11,7 @@ from game_data import levels
 from Camera import Camera
 
 
+
 class Level:
 	def __init__(self,level_data,surface):
 		# general setup
@@ -134,14 +135,10 @@ class Level:
 						enemy.kill()
 
 
-	def enemyGotHit(self,target):
-		for enemy in self.enemy_sprites.sprites():
-			if target.groundAttack and pg.Rect.colliderect(target.attackBox,enemy.hitBox):
-				print('enemy hit by player attack')
-
-			else:
-				pass
-
+	# def enemyGotHit(self,target):
+	# 	for enemy in self.enemy_sprites.sprites():
+	# 		if target.groundAttack and pg.Rect.colliderect(target.attackBox,enemy.hitBox):
+	# 			print('enemy hit by player attack')
 
 	# def enemyHit(self,target):
 	# 	for enemy in self.enemy_sprites.sprites():
@@ -219,18 +216,35 @@ class Level:
 			self.world_shiftx = 0
 			player.speed = 6
 	
+	def scroll_y(self):
+		player = self.playerSpriteGroup.sprite
+		player_y = player.rect.centery
+		direction_y = player.direction.y
+
+		# if player_x < self.camera.camera_rect.left + (screen_width / 4) and direction_x < 0:
+		if player_y < screen_width / 3 and direction_y < 0:
+			self.world_shifty = 10 * self.Player.gravity
+			player.rect.y += self.world_shifty
+			# player.speed = 0
+		# elif player_x > self.camera.camera_rect.right - (screen_width / 4) and direction_x > 0:
+		elif player_y > screen_width and direction_y > 0:
+			self.world_shifty = -10 / self.Player.gravity
+			player.rect.y -= 50
+			# player.speed = 0
+		else:
+			self.world_shifty = 0
+			# player.speed = 6
+	
 	# def scroll_y(self):
-	# 	player = self.Player
-	# 	if player.rect.y < (screen_height/3):
-	# 		print('scroll down')
-	# 		self.world_shifty = 5
-	# 		player.rect.y  -= 5
-	# 	elif player.rect.y > (screen_height-100):
-	# 		print('scroll up')
-	# 		self.world_shifty = -5
-	# 		player.rect.y  += 5
-	# 	else:
-	# 		self.world_shifty = 0
+		# player = self.playerSpriteGroup.sprite
+		# if player.rect.y < (screen_height/3):
+		# 	self.world_shifty = 20
+		# 	# player.rect.y  -= 5
+		# elif player.rect.y > (screen_height-100):
+		# 	self.world_shifty = -20
+		# 	player.rect.y  += 5
+		# else:
+		# 	self.world_shifty = 0
 			
 
 	def get_player_on_ground(self):
@@ -285,8 +299,8 @@ class Level:
 		self.dust_sprite.update(self.world_shiftx,self.world_shifty)
 		self.dust_sprite.draw(self.display_surface)
 
+		self.scroll_y()
 		self.scroll_x()
-		# self.scroll_y()
 		self.playerSpriteGroup.draw(self.display_surface)
 		self.goal.update(self.world_shiftx,self.world_shifty)
 		self.goBack.update(self.world_shiftx,self.world_shifty)
@@ -296,11 +310,10 @@ class Level:
 		#UI
 		self.UI.show_health(self.Player.hp,100)
 
-		#camera
+		# camera
 		self.camera.custom_draw(self.Player)
 		self.camera.update()
 
 		#check if player attacked enemy
-		self.enemyGotHit(self.Player)
 
 		

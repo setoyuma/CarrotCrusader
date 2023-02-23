@@ -31,32 +31,32 @@ def main():
 		'''CHANGE TO NEXT LEVEL'''
 		if pg.sprite.spritecollide(level.goal.sprite, level.playerSpriteGroup,False):
 			# print('Touched Goal')
-			print('amount of levels:',len(levels))
-			print('current level',currentLevel)
+			# print('amount of levels:',len(levels))
+			# print('current level',currentLevel)
 			if currentLevel < len(levels) :
 				currentLevel += 1
 				level = Level(levels[currentLevel],screen)
-				print('current level',currentLevel)
+				# print('current level',currentLevel)
 			if currentLevel == len(levels):
-				print('game complete')
+				# print('game complete')
 				currentLevel - 1
-				print('current level',currentLevel)
+				# print('current level',currentLevel)
 		
 		'''CHANGE TO PREVIOUS LEVEL'''
 		if pg.sprite.spritecollide(level.goBack.sprite, level.playerSpriteGroup,False):
-			print('Touched Go Back')
+			# print('Touched Go Back')
 			currentLevel -= 1
 			if currentLevel < 1:
-				print('game at Start')
+				# print('game at Start')
 				currentLevel = 1
-				print('current level',currentLevel)
+				# print('current level',currentLevel)
 			else:
 				level = Level(levels[currentLevel],screen)
-				print('current level',currentLevel)
+				# print('current level',currentLevel)
 			if currentLevel > 1:
 				level.wentBack = True
 				level = Level(levels[currentLevel],screen)
-				print('current level',currentLevel)
+				# print('current level',currentLevel)
 		
 		
 		for event in pg.event.get():

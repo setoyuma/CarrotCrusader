@@ -37,10 +37,13 @@ class Camera(pg.sprite.Group):
 
 		if target.rect.left < self.camera_rect.left:
 			self.camera_rect.left = target.rect.left
+
 		if target.rect.right > self.camera_rect.right:
 			self.camera_rect.right = target.rect.right
+
 		if target.rect.top < self.camera_rect.top:
 			self.camera_rect.top = target.rect.top
+			
 		if target.rect.bottom > self.camera_rect.bottom:
 			self.camera_rect.bottom = target.rect.bottom
 
@@ -60,4 +63,4 @@ class Camera(pg.sprite.Group):
 
 
 
-		# pg.draw.rect(self.displaySurface,'yellow',self.camera_rect,5) #show camera box
+		pg.draw.rect(self.displaySurface,'yellow',self.camera_rect,5) #show camera box

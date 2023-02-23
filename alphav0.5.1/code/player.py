@@ -95,6 +95,8 @@ class Player(pg.sprite.Sprite):
 		elif self.on_ceiling:
 			# self.rect = self.hitBox
 			self.rect = self.image.get_rect(midtop = self.rect.midtop)
+		
+		
 
 	def run_dust_animation(self):
 		if self.status == 'run' and self.on_ground:
@@ -147,19 +149,18 @@ class Player(pg.sprite.Sprite):
 			'''make atk hitbox'''
 			self.groundAttack = True
 			if self.facing_right:
-				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),50,30)
+				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),60,50)
 				self.rect.union(self.attackBox)
 				# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,-1,5,-1,5)
 			
 			elif self.facing_right == False:
-				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),-50,30)
+				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),-60,50)
 				self.rect.union(self.attackBox)
 				# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,5,-1,5,-1)
 		else:
 			self.groundAttack = False
 			self.attackBox = pg.rect.Rect(0,0,0,0)
 
-		
 
 	def get_status(self):
 		if self.direction.y < 0:
