@@ -299,7 +299,7 @@ class Level:
 		self.dust_sprite.update(self.world_shiftx,self.world_shifty)
 		self.dust_sprite.draw(self.display_surface)
 
-		self.scroll_y()
+		# self.scroll_y()
 		self.scroll_x()
 		self.playerSpriteGroup.draw(self.display_surface)
 		self.goal.update(self.world_shiftx,self.world_shifty)
