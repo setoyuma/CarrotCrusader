@@ -16,8 +16,7 @@ class Level:
 	def __init__(self,level_data,surface):
 		# general setup
 		self.display_surface = surface
-		self.world_shiftx = 0
-		self.world_shifty = 0
+		self.world_shift = [0,0]
 		self.current_x = None
 		self.gameLevels = levels
 		self.currentLevel = 0
@@ -69,8 +68,8 @@ class Level:
 		for row_index, row in enumerate(layout):
 			for col_index,val in enumerate(row):
 				if val != '-1':
-					x = col_index * tile_size
-					y = row_index * tile_size
+					x = col_index * tile_size - self.world_shift[0]
+					y = row_index * tile_size - self.world_shift[1]
 
 					if type == 'terrain':
 						terrain_tile_list = import_cut_graphics('../graphics/terrain/terrain_tiles.png')
@@ -133,7 +132,6 @@ class Level:
 						explosion_sprite = ParticleEffect(enemy.hitBox.center,'explosion')
 						self.explosion_sprites.add(explosion_sprite)
 						enemy.kill()
-
 
 	# def enemyGotHit(self,target):
 	# 	for enemy in self.enemy_sprites.sprites():
@@ -204,49 +202,33 @@ class Level:
 		player_x = player.rect.centerx
 		direction_x = player.direction.x
 
-		# if player_x < self.camera.camera_rect.left + (screen_width / 4) and direction_x < 0:
 		if player_x < screen_width / 3 and direction_x < 0:
-			self.world_shiftx = 6
+			self.world_shift[0] = 6
 			player.speed = 0
-		# elif player_x > self.camera.camera_rect.right - (screen_width / 4) and direction_x > 0:
 		elif player_x > screen_width - (screen_width / 3) and direction_x > 0:
-			self.world_shiftx = -6
+			self.world_shift[0] = -6
 			player.speed = 0
 		else:
-			self.world_shiftx = 0
+			self.world_shift[0] = 0
 			player.speed = 6
 	
 	def scroll_y(self):
 		player = self.playerSpriteGroup.sprite
-		player_y = player.rect.centery
+		# player = self.Player
+		player_top = player.rect.top
+		player_bottom = player.rect.bottom
 		direction_y = player.direction.y
 
-		# if player_x < self.camera.camera_rect.left + (screen_width / 4) and direction_x < 0:
-		if player_y < screen_width / 3 and direction_y < 0:
-			self.world_shifty = 10 * self.Player.gravity
-			player.rect.y += self.world_shifty
-			# player.speed = 0
-		# elif player_x > self.camera.camera_rect.right - (screen_width / 4) and direction_x > 0:
-		elif player_y > screen_width and direction_y > 0:
-			self.world_shifty = -10 / self.Player.gravity
-			player.rect.y -= 50
-			# player.speed = 0
+		if player_top < screen_height / 3 and direction_y < 0: #going up
+			self.world_shift[1] = 8
+			self.Player.rect.y = screen_height / 3
+		elif player_bottom > screen_height - (screen_height / 5) and direction_y > 0: #going down
+			self.world_shift[1] = -8
+			self.Player.rect.y = screen_height - (screen_height / 5)
 		else:
-			self.world_shifty = 0
-			# player.speed = 6
+			self.world_shift[1] = 0
+			self.Player.rect.y = self.Player.rect.y
 	
-	# def scroll_y(self):
-		# player = self.playerSpriteGroup.sprite
-		# if player.rect.y < (screen_height/3):
-		# 	self.world_shifty = 20
-		# 	# player.rect.y  -= 5
-		# elif player.rect.y > (screen_height-100):
-		# 	self.world_shifty = -20
-		# 	player.rect.y  += 5
-		# else:
-		# 	self.world_shifty = 0
-			
-
 	def get_player_on_ground(self):
 		if self.playerSpriteGroup.sprite.on_ground:
 			self.player_on_ground = True
@@ -269,11 +251,11 @@ class Level:
 		# self.sky.draw(self.display_surface)
 		
 		# background palms
-		self.bg_pillar_sprites.update(self.world_shiftx,self.world_shifty)
+		self.bg_pillar_sprites.update(self.world_shift[0],self.world_shift[1])
 		self.bg_pillar_sprites.draw(self.display_surface) 
 
 		# terrain 
-		self.terrain_sprites.update(self.world_shiftx,self.world_shifty)
+		self.terrain_sprites.update(self.world_shift[0],self.world_shift[1])
 		self.terrain_sprites.draw(self.display_surface)
 		
 		# player sprites
@@ -285,35 +267,34 @@ class Level:
 		self.create_landing_dust()
 
 		# enemy 
-		self.enemy_sprites.update(self.world_shiftx,self.world_shifty)
-		self.constraint_sprites.update(self.world_shiftx,self.world_shifty)
+		self.enemy_sprites.update(self.world_shift[0],self.world_shift[1])
+		self.constraint_sprites.update(self.world_shift[0],self.world_shift[1])
 		self.check_enemy_collisions(self.Player)
 		# self.enemyHit(self.Player)
 		# self.constraint_sprites.draw(self.display_surface)
 		self.enemy_collision_reverse()
 		self.enemy_sprites.draw(self.display_surface)
-		self.explosion_sprites.update(self.world_shiftx,self.world_shifty)
+		self.explosion_sprites.update(self.world_shift[0],self.world_shift[1])
 		self.explosion_sprites.draw(self.display_surface)
 
 		# dust particles 
-		self.dust_sprite.update(self.world_shiftx,self.world_shifty)
+		self.dust_sprite.update(self.world_shift[0],self.world_shift[1])
 		self.dust_sprite.draw(self.display_surface)
 
-		# self.scroll_y()
+		self.scroll_y()
 		self.scroll_x()
 		self.playerSpriteGroup.draw(self.display_surface)
-		self.goal.update(self.world_shiftx,self.world_shifty)
-		self.goBack.update(self.world_shiftx,self.world_shifty)
+		self.goal.update(self.world_shift[0],self.world_shift[1])
+		self.goBack.update(self.world_shift[0],self.world_shift[1])
 		self.goal.draw(self.display_surface)
 		self.goBack.draw(self.display_surface)
 
 		#UI
 		self.UI.show_health(self.Player.hp,100)
 
-		# camera
-		self.camera.custom_draw(self.Player)
-		self.camera.update()
+		# # camera
+		# self.camera.custom_draw(self.Player)
+		# self.camera.update()
 
-		#check if player attacked enemy
 
 		
