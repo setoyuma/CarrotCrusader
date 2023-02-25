@@ -38,6 +38,7 @@ def main():
 
 		pg.display.update()
 		clock.tick(60)
+		print(int(clock.get_fps()))
 
 if __name__ == '__main__':
 	main()
