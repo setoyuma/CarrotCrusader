@@ -12,6 +12,8 @@ def main():
 	pg.display.set_icon(pg.image.load("../graphics/gameIcon.ico"))
 	clock = pg.time.Clock()
 	level = Level(level_0,screen)
+	BG = pg.image.load('../graphics/decoration/sky/DarkSky.png')
+
 
 	while True:
 		for event in pg.event.get():
@@ -29,7 +31,9 @@ def main():
 					main()
 
 		
-		screen.fill('grey')
+
+		screen.fill('#0f0024')
+		screen.blit(BG,(0,0))
 		level.run()
 
 		pg.display.update()

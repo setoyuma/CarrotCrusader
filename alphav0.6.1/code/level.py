@@ -11,7 +11,7 @@ class Level:
 	def __init__(self,level_data,surface):
 		# general setup
 		self.display_surface = surface
-		self.world_shift = 0
+		self.world_shift = [0,0]
 		self.current_x = None
 
 		# player 
@@ -28,9 +28,13 @@ class Level:
 		terrain_layout = import_csv_layout(level_data['terrain'])
 		self.terrain_sprites = self.create_tile_group(terrain_layout,'terrain')
 
-		# enemy 
-		enemy_layout = import_csv_layout(level_data['enemies'])
-		self.enemy_sprites = self.create_tile_group(enemy_layout,'enemies')
+		# enemy setup
+		'''caim'''
+		caim_layout = import_csv_layout(level_data['caim'])
+		self.caim_sprites = self.create_tile_group(caim_layout,'caim')
+		'''moss sentinel'''
+		mossSent_layout = import_csv_layout(level_data['mossSent'])
+		self.mossSent_sprites = self.create_tile_group(mossSent_layout,'mossSent')
 
 		# constraint 
 		constraint_layout = import_csv_layout(level_data['constraints'])
@@ -56,8 +60,10 @@ class Level:
 						tile_surface = terrain_tile_list[int(val)]
 						sprite = StaticTile(tile_size,x,y,tile_surface)
 
-					if type == 'enemies':
-						sprite = Enemy(tile_size,x,y)
+					if type == 'caim':
+						sprite = Enemy(tile_size,x,y,'caim')
+					if type == 'mossSent':
+						sprite = Enemy(tile_size,x,y,'mossSent')
 
 					if type == 'constraint':
 						sprite = Tile(tile_size,x,y)
@@ -80,7 +86,12 @@ class Level:
 					self.goal.add(sprite)
 
 	def enemy_collision_reverse(self):
-		for enemy in self.enemy_sprites.sprites():
+		'''caim'''
+		for enemy in self.caim_sprites.sprites():
+			if pygame.sprite.spritecollide(enemy,self.constraint_sprites,False):
+				enemy.reverse()
+		'''moss sentinel'''
+		for enemy in self.mossSent_sprites.sprites():
 			if pygame.sprite.spritecollide(enemy,self.constraint_sprites,False):
 				enemy.reverse()
 
@@ -138,15 +149,34 @@ class Level:
 		player_x = player.rect.centerx
 		direction_x = player.direction.x
 
-		if player_x < screen_width / 4 and direction_x < 0:
-			self.world_shift = 8
+		if player_x < screen_width / 2 and direction_x < 0:
+			self.world_shift[0] = 8
 			player.speed = 0
-		elif player_x > screen_width - (screen_width / 4) and direction_x > 0:
-			self.world_shift = -8
+		elif player_x > screen_width - (screen_width / 2) and direction_x > 0:
+			self.world_shift[0] = -8
 			player.speed = 0
 		else:
-			self.world_shift = 0
+			self.world_shift[0] = 0
 			player.speed = 8
+	
+	'''causes player to clip through floor when moving and level scrolls down'''
+
+	def scroll_y(self):
+		player = self.player.sprite
+		# player = self.Player
+		player_top = player.rect.top
+		player_bottom = player.rect.bottom
+		direction_y = player.direction.y
+
+		if player_top < screen_height / 3 and direction_y < 0: #going up
+			self.world_shift[1] = 8
+			player.rect.y = screen_height / 3
+		elif player_bottom > screen_height - (screen_height / 5) and direction_y > 0: #going down
+			self.world_shift[1] = -8
+			player.rect.y = screen_height - (screen_height / 5)
+		else:
+			self.world_shift[1] = 0
+			player.rect.y = player.rect.y
 
 	def get_player_on_ground(self):
 		if self.player.sprite.on_ground:
@@ -167,35 +197,39 @@ class Level:
 		# run the entire game / level 
 		
 		# sky 
-		self.sky.draw(self.display_surface)
-		self.clouds.draw(self.display_surface,self.world_shift)
+		# self.sky.draw(self.display_surface)
+		# self.clouds.draw(self.display_surface,self.world_shift[0],self.world_shift[1])
 		
 		# terrain 
-		self.terrain_sprites.update(self.world_shift)
+		self.terrain_sprites.update(self.world_shift[0],self.world_shift[1])
 		self.terrain_sprites.draw(self.display_surface)
 		
 		# enemy 
-		self.enemy_sprites.update(self.world_shift)
-		self.constraint_sprites.update(self.world_shift)
+		self.caim_sprites.update(self.world_shift[0],self.world_shift[1])
+		self.mossSent_sprites.update(self.world_shift[0],self.world_shift[1])
+
+		self.constraint_sprites.update(self.world_shift[0],self.world_shift[1])
 		self.enemy_collision_reverse()
-		self.enemy_sprites.draw(self.display_surface)
+		
+		self.caim_sprites.draw(self.display_surface)
+		self.mossSent_sprites.draw(self.display_surface)
 
 		# dust particles 
-		self.dust_sprite.update(self.world_shift)
+		self.dust_sprite.update(self.world_shift[0],self.world_shift[1])
 		self.dust_sprite.draw(self.display_surface)
 
 		# player sprites
 		self.player.update()
 		self.horizontal_movement_collision()
-		
 		self.get_player_on_ground()
 		self.vertical_movement_collision()
 		self.create_landing_dust()
 		
 		self.scroll_x()
+		# self.scroll_y()  
 		self.player.draw(self.display_surface)
-		self.goal.update(self.world_shift)
+		self.goal.update(self.world_shift[0],self.world_shift[1])
 		self.goal.draw(self.display_surface)
 
 		# water 
-		self.water.draw(self.display_surface,self.world_shift)
+		self.water.draw(self.display_surface,self.world_shift[0],self.world_shift[1])

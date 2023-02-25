@@ -3,8 +3,8 @@ from tiles import AnimatedTile
 from random import randint
 
 class Enemy(AnimatedTile):
-	def __init__(self,size,x,y):
-		super().__init__(size,x,y,'../graphics/enemy/run')
+	def __init__(self,size,x,y,enemy_type):
+		super().__init__(size,x,y,f'../graphics/enemy/{enemy_type}/run')
 		self.rect.y += size - self.image.get_size()[1]
 		self.speed = randint(3,5)
 
@@ -18,8 +18,9 @@ class Enemy(AnimatedTile):
 	def reverse(self):
 		self.speed *= -1
 
-	def update(self,shift):
-		self.rect.x += shift
+	def update(self,shiftx,shifty):
+		self.rect.x += shiftx
+		self.rect.y += shifty
 		self.animate()
 		self.move()
 		self.reverse_image()

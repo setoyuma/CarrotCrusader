@@ -40,8 +40,8 @@ class Water:
 			sprite = AnimatedTile(192,x,y,'../graphics/decoration/water')
 			self.water_sprites.add(sprite)
 
-	def draw(self,surface,shift):
-		self.water_sprites.update(shift)
+	def draw(self,surface,shiftx,shifty):
+		self.water_sprites.update(shiftx,shifty)
 		self.water_sprites.draw(surface)
 
 class Clouds:
@@ -60,6 +60,6 @@ class Clouds:
 			sprite = StaticTile(0,x,y,cloud)
 			self.cloud_sprites.add(sprite)
 
-	def draw(self,surface,shift):
-		self.cloud_sprites.update(shift)
+	def draw(self,surface,shiftx,shifty):
+		self.cloud_sprites.update(shiftx,shifty)
 		self.cloud_sprites.draw(surface)
