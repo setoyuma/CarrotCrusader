@@ -6,6 +6,7 @@ from enemy import Enemy
 from decoration import Sky, Water, Clouds
 from player import Player
 from particles import ParticleEffect
+from ui import UI
 
 class Level:
 	def __init__(self,level_data,surface):
@@ -13,6 +14,9 @@ class Level:
 		self.display_surface = surface
 		self.world_shift = [0,0]
 		self.current_x = None
+
+		#ui
+		self.UI = UI(self.display_surface)
 
 		# player 
 		player_layout = import_csv_layout(level_data['player'])
@@ -78,8 +82,8 @@ class Level:
 				x = col_index * tile_size
 				y = row_index * tile_size
 				if val == '0':
-					sprite = Player((x,y),self.display_surface,self.create_jump_particles)
-					self.player.add(sprite)
+					self.Player = Player((x,y),self.display_surface,self.create_jump_particles)
+					self.player.add(self.Player)
 				if val == '1':
 					hat_surface = pygame.image.load('../graphics/character/hat.png').convert_alpha()
 					sprite = StaticTile(tile_size,x,y,hat_surface)
@@ -233,3 +237,7 @@ class Level:
 
 		# water 
 		self.water.draw(self.display_surface,self.world_shift[0],self.world_shift[1])
+
+		#ui
+		self.UI.show_health(self.Player.hp,100)
+

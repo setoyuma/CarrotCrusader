@@ -30,6 +30,7 @@ class Player(pygame.sprite.Sprite):
 		self.on_ceiling = False
 		self.on_left = False
 		self.on_right = False
+		self.hp = 100
 
 	def import_character_assets(self):
 		character_path = '../graphics/character/'
