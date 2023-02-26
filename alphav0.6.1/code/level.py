@@ -46,9 +46,10 @@ class Level:
 
 		# decoration 
 		self.sky = Sky(8)
-		level_width = len(terrain_layout[0]) * tile_size
-		self.water = Water(screen_height - 20,level_width)
-		self.clouds = Clouds(400,level_width,30)
+		self.level_width = len(terrain_layout[0]) * tile_size
+		self.water = Water(screen_height - 20,self.level_width)
+		self.clouds = Clouds(400,self.level_width,30)
+		print(self.level_width)
 
 	def create_tile_group(self,layout,type):
 		sprite_group = pygame.sprite.Group()
@@ -162,7 +163,11 @@ class Level:
 		else:
 			self.world_shift[0] = 0
 			player.speed = 8
-	
+
+		print()
+
+
+
 	'''causes player to clip through floor when moving and level scrolls down'''
 
 	def scroll_y(self):
@@ -177,10 +182,12 @@ class Level:
 			player.rect.y = screen_height / 3
 		elif player_bottom > screen_height - (screen_height / 5) and direction_y > 0: #going down
 			self.world_shift[1] = -8
-			player.rect.y = screen_height - (screen_height / 5)
+			if self.player_on_ground:
+				pass
+			else:
+				player.rect.y = screen_height - (screen_height / 5)
 		else:
 			self.world_shift[1] = 0
-			player.rect.y = player.rect.y
 
 	def get_player_on_ground(self):
 		if self.player.sprite.on_ground:
