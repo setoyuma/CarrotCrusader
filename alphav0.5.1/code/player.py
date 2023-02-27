@@ -140,26 +140,27 @@ class Player(pg.sprite.Sprite):
 		else:
 			self.hitBoxOn = False
 
-		if keys[pg.K_p]:
-			font = pg.font.Font(None,64)
-			text = font.render("Ground Attack",False,'white','black')
-			textPos = text.get_rect(centerx=self.display_surface.get_width()/2, y=10)
-			self.display_surface.blit(text,textPos)
+		'''PLAYER ATTACK PROTOTYPE'''
+		# if keys[pg.K_p]:
+		# 	font = pg.font.Font(None,64)
+		# 	text = font.render("Ground Attack",False,'white','black')
+		# 	textPos = text.get_rect(centerx=self.display_surface.get_width()/2, y=10)
+		# 	self.display_surface.blit(text,textPos)
 
-			'''make atk hitbox'''
-			self.groundAttack = True
-			if self.facing_right:
-				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),60,50)
-				self.rect.union(self.attackBox)
-				# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,-1,5,-1,5)
+		# 	'''make atk hitbox'''
+		# 	self.groundAttack = True
+		# 	if self.facing_right:
+		# 		self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),60,50)
+		# 		self.rect.union(self.attackBox)
+		# 		# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,-1,5,-1,5)
 			
-			elif self.facing_right == False:
-				self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),-60,50)
-				self.rect.union(self.attackBox)
-				# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,5,-1,5,-1)
-		else:
-			self.groundAttack = False
-			self.attackBox = pg.rect.Rect(0,0,0,0)
+		# 	elif self.facing_right == False:
+		# 		self.attackBox = pg.rect.Rect((self.rect.right-50),(self.rect.top+20),-60,50)
+		# 		self.rect.union(self.attackBox)
+		# 		# pg.draw.rect(self.display_surface,'red',self.attackBox,0,-1,5,-1,5,-1)
+		# else:
+		# 	self.groundAttack = False
+		# 	self.attackBox = pg.rect.Rect(0,0,0,0)
 
 
 	def get_status(self):

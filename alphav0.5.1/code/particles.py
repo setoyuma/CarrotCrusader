@@ -1,7 +1,7 @@
-import pygame as pg
+import pygame
 from support import import_folder
 
-class ParticleEffect(pg.sprite.Sprite):
+class ParticleEffect(pygame.sprite.Sprite):
 	def __init__(self,pos,type):
 		super().__init__()
 		self.frame_index = 0
@@ -10,8 +10,6 @@ class ParticleEffect(pg.sprite.Sprite):
 			self.frames = import_folder('../graphics/character/dust_particles/jump')
 		if type == 'land':
 			self.frames = import_folder('../graphics/character/dust_particles/land')
-		if type == 'explosion':
-			self.frames = import_folder('../graphics/enemy/explosion')
 		self.image = self.frames[self.frame_index]
 		self.rect = self.image.get_rect(center = pos)
 

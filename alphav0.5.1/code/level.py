@@ -1,4 +1,4 @@
-import pygame as pg 
+import pygame 
 from support import import_csv_layout, import_cut_graphics
 from settings import tile_size, screen_height, screen_width
 from tiles import Tile, StaticTile, Crate, Coin, Palm
@@ -7,10 +7,6 @@ from decoration import Sky
 from player import Player
 from particles import ParticleEffect
 from ui import UI
-from game_data import levels
-from Camera import Camera
-
-
 
 class Level:
 	def __init__(self,level_data,surface):
@@ -18,69 +14,59 @@ class Level:
 		self.display_surface = surface
 		self.world_shift = [0,0]
 		self.current_x = None
-		self.gameLevels = levels
-		self.currentLevel = 0
-		self.level_data = level_data
 
-		#camera
-		self.camera = Camera()
-
-		# player 
-		player_layout = import_csv_layout(self.level_data['player'])
-		self.playerSpriteGroup = pg.sprite.GroupSingle()
-		self.goal = pg.sprite.GroupSingle()
-		self.goBack = pg.sprite.GroupSingle()
-		self.player_setup(player_layout)
-
-		#UI
+		#ui
 		self.UI = UI(self.display_surface)
 
+		# player 
+		player_layout = import_csv_layout(level_data['player'])
+		self.player = pygame.sprite.GroupSingle()
+		self.goal = pygame.sprite.GroupSingle()
+		self.player_setup(player_layout)
+
 		# dust 
-		self.dust_sprite = pg.sprite.GroupSingle()
+		self.dust_sprite = pygame.sprite.GroupSingle()
 		self.player_on_ground = False
 
-		# explosion particles 
-		self.explosion_sprites = pg.sprite.Group()
-
 		# terrain setup
-		terrain_layout = import_csv_layout(self.level_data['terrain'])
+		terrain_layout = import_csv_layout(level_data['terrain'])
 		self.terrain_sprites = self.create_tile_group(terrain_layout,'terrain')
 
-		# background pillars 
-		bg_pillar_layout = import_csv_layout(self.level_data['bg Pillar'])
-		self.bg_pillar_sprites = self.create_tile_group(bg_pillar_layout,'bg Pillar')
-
-		# enemy 
-		enemy_layout = import_csv_layout(self.level_data['enemies'])
-		self.enemy_sprites = self.create_tile_group(enemy_layout,'enemies')
+		# enemy setup
+		'''caim'''
+		caim_layout = import_csv_layout(level_data['caim'])
+		self.caim_sprites = self.create_tile_group(caim_layout,'caim')
+		'''moss sentinel'''
+		mossSent_layout = import_csv_layout(level_data['mossSent'])
+		self.mossSent_sprites = self.create_tile_group(mossSent_layout,'mossSent')
 
 		# constraint 
-		constraint_layout = import_csv_layout(self.level_data['constraints'])
+		constraint_layout = import_csv_layout(level_data['constraints'])
 		self.constraint_sprites = self.create_tile_group(constraint_layout,'constraint')
 
 		# decoration 
-		# self.sky = Sky(0)
-		level_width = len(terrain_layout[0]) * tile_size
+		self.sky = Sky(8)
+		self.level_width = len(terrain_layout[0]) * tile_size
+		print(self.level_width)
 
 	def create_tile_group(self,layout,type):
-		sprite_group = pg.sprite.Group()
+		sprite_group = pygame.sprite.Group()
 
 		for row_index, row in enumerate(layout):
 			for col_index,val in enumerate(row):
 				if val != '-1':
-					x = col_index * tile_size - self.world_shift[0]
-					y = row_index * tile_size - self.world_shift[1]
+					x = col_index * tile_size
+					y = row_index * tile_size
 
 					if type == 'terrain':
 						terrain_tile_list = import_cut_graphics('../graphics/terrain/terrain_tiles.png')
 						tile_surface = terrain_tile_list[int(val)]
 						sprite = StaticTile(tile_size,x,y,tile_surface)
-						
-					if type == 'bg Pillar':
-						sprite = Palm(tile_size,x,y,'../graphics/terrain/bg_pillar',64)
 
-					if type == 'enemies':
-						sprite = Enemy(tile_size*3,x,y,self.display_surface,'RockSentinel')   #change enemy hitbox
+					if type == 'caim':
+						sprite = Enemy(tile_size,x,y,'caim')
+					if type == 'mossSent':
+						sprite = Enemy(tile_size,x,y,'mossSent')
 
 					if type == 'constraint':
 						sprite = Tile(tile_size,x,y)
@@ -96,70 +82,34 @@ class Level:
 				y = row_index * tile_size
 				if val == '0':
 					self.Player = Player((x,y),self.display_surface,self.create_jump_particles)
-					self.playerSpriteGroup.add(self.Player)
+					self.player.add(self.Player)
 				if val == '1':
-					hat_surface = pg.image.load('../graphics/character/hat.png').convert_alpha()
+					hat_surface = pygame.image.load('../graphics/character/hat.png').convert_alpha()
 					sprite = StaticTile(tile_size,x,y,hat_surface)
 					self.goal.add(sprite)
-				if val == '2':
-					hat_surface = pg.image.load('../graphics/character/hat.png').convert_alpha()
-					sprite = StaticTile(tile_size,x,y,hat_surface)
-					self.goBack.add(sprite)
 
 	def enemy_collision_reverse(self):
-		for enemy in self.enemy_sprites.sprites():
-			if pg.sprite.spritecollide(enemy,self.constraint_sprites,False):
+		'''caim'''
+		for enemy in self.caim_sprites.sprites():
+			if pygame.sprite.spritecollide(enemy,self.constraint_sprites,False):
+				enemy.reverse()
+		'''moss sentinel'''
+		for enemy in self.mossSent_sprites.sprites():
+			if pygame.sprite.spritecollide(enemy,self.constraint_sprites,False):
 				enemy.reverse()
 
-	def check_enemy_collisions(self,target):
-				for enemy in self.enemy_sprites.sprites():
-					enemy_center = enemy.hitBox.centery
-					enemy_top = enemy.hitBox.top
-					player_bottom = target.hitBox.bottom
-
-					if pg.Rect.colliderect(enemy.hitBox, target.hitBox):
-						if enemy_top < player_bottom < enemy_center and target.direction.y >= 0:
-							# self.stomp_sound.play()
-							target.direction.y = -15
-							explosion_sprite = ParticleEffect(enemy.hitBox.center,'explosion')
-							self.explosion_sprites.add(explosion_sprite)
-							enemy.kill()
-						else:	#player damage step
-							target.getDamage()
-
-					if pg.Rect.colliderect(enemy.hitBox,target.attackBox):
-						print('player hit enemy with attack')
-						explosion_sprite = ParticleEffect(enemy.hitBox.center,'explosion')
-						self.explosion_sprites.add(explosion_sprite)
-						enemy.kill()
-
-	# def enemyGotHit(self,target):
-	# 	for enemy in self.enemy_sprites.sprites():
-	# 		if target.groundAttack and pg.Rect.colliderect(target.attackBox,enemy.hitBox):
-	# 			print('enemy hit by player attack')
-
-	# def enemyHit(self,target):
-	# 	for enemy in self.enemy_sprites.sprites():
-	# 		if pg.Rect.colliderect(enemy.hitBox, target.hitBox):
-	# 			target.hitStatus = True
-	# 			target.rect.x -= 85
-	# 			target.rect.y -= 15
-	# 			print('\nplayer hit\n')
-	# 			self.Player.hp -= 10
-	# 			# target.rect.x -= 1   #possible mvmnt slow
-
 	def create_jump_particles(self,pos):
-		if self.playerSpriteGroup.sprite.facing_right:
-			pos -= pg.math.Vector2(10,5)
+		if self.player.sprite.facing_right:
+			pos -= pygame.math.Vector2(10,5)
 		else:
-			pos += pg.math.Vector2(10,-5)
+			pos += pygame.math.Vector2(10,-5)
 		jump_particle_sprite = ParticleEffect(pos,'jump')
 		self.dust_sprite.add(jump_particle_sprite)
 
 	def horizontal_movement_collision(self):
-		player = self.playerSpriteGroup.sprite
+		player = self.player.sprite
 		player.rect.x += player.direction.x * player.speed
-		collidable_sprites = self.terrain_sprites.sprites()
+		collidable_sprites = self.terrain_sprites.sprites() # + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
 		for sprite in collidable_sprites:
 			if sprite.rect.colliderect(player.rect):
 				if player.direction.x < 0: 
@@ -177,9 +127,9 @@ class Level:
 			player.on_right = False
 
 	def vertical_movement_collision(self):
-		player = self.playerSpriteGroup.sprite
+		player = self.player.sprite
 		player.apply_gravity()
-		collidable_sprites = self.terrain_sprites.sprites()
+		collidable_sprites = self.terrain_sprites.sprites() # + self.crate_sprites.sprites() + self.fg_palm_sprites.sprites()
 
 		for sprite in collidable_sprites:
 			if sprite.rect.colliderect(player.rect):
@@ -198,22 +148,27 @@ class Level:
 			player.on_ceiling = False
 
 	def scroll_x(self):
-		player = self.playerSpriteGroup.sprite
+		player = self.player.sprite
 		player_x = player.rect.centerx
 		direction_x = player.direction.x
 
-		if player_x < screen_width / 3 and direction_x < 0:
-			self.world_shift[0] = 6
+		if player_x < screen_width / 2 and direction_x < 0:
+			self.world_shift[0] = 8
 			player.speed = 0
-		elif player_x > screen_width - (screen_width / 3) and direction_x > 0:
-			self.world_shift[0] = -6
+		elif player_x > screen_width - (screen_width / 2) and direction_x > 0:
+			self.world_shift[0] = -8
 			player.speed = 0
 		else:
 			self.world_shift[0] = 0
-			player.speed = 6
-	
+			player.speed = 8
+
+
+
+
+	'''causes player to clip through floor when moving and level scrolls down'''
+
 	def scroll_y(self):
-		player = self.playerSpriteGroup.sprite
+		player = self.player.sprite
 		# player = self.Player
 		player_top = player.rect.top
 		player_bottom = player.rect.bottom
@@ -221,27 +176,29 @@ class Level:
 
 		if player_top < screen_height / 3 and direction_y < 0: #going up
 			self.world_shift[1] = 8
-			self.Player.rect.y = screen_height / 3
+			player.rect.y = screen_height / 3
 		elif player_bottom > screen_height - (screen_height / 5) and direction_y > 0: #going down
 			self.world_shift[1] = -8
-			self.Player.rect.y = screen_height - (screen_height / 5)
+			if self.player_on_ground:
+				pass
+			else:
+				player.rect.y = screen_height - (screen_height / 5)
 		else:
 			self.world_shift[1] = 0
-			self.Player.rect.y = self.Player.rect.y
-	
+
 	def get_player_on_ground(self):
-		if self.playerSpriteGroup.sprite.on_ground:
+		if self.player.sprite.on_ground:
 			self.player_on_ground = True
 		else:
 			self.player_on_ground = False
 
 	def create_landing_dust(self):
-		if not self.player_on_ground and self.playerSpriteGroup.sprite.on_ground and not self.dust_sprite.sprites():
-			if self.playerSpriteGroup.sprite.facing_right:
-				offset = pg.math.Vector2(10,15)
+		if not self.player_on_ground and self.player.sprite.on_ground and not self.dust_sprite.sprites():
+			if self.player.sprite.facing_right:
+				offset = pygame.math.Vector2(10,15)
 			else:
-				offset = pg.math.Vector2(-10,15)
-			fall_dust_particle = ParticleEffect(self.playerSpriteGroup.sprite.rect.midbottom - offset,'land')
+				offset = pygame.math.Vector2(-10,15)
+			fall_dust_particle = ParticleEffect(self.player.sprite.rect.midbottom - offset,'land')
 			self.dust_sprite.add(fall_dust_particle)
 
 	def run(self):
@@ -249,52 +206,40 @@ class Level:
 		
 		# sky 
 		# self.sky.draw(self.display_surface)
+		# self.clouds.draw(self.display_surface,self.world_shift[0],self.world_shift[1])
 		
-		# background palms
-		self.bg_pillar_sprites.update(self.world_shift[0],self.world_shift[1])
-		self.bg_pillar_sprites.draw(self.display_surface) 
-
 		# terrain 
 		self.terrain_sprites.update(self.world_shift[0],self.world_shift[1])
 		self.terrain_sprites.draw(self.display_surface)
 		
-		# player sprites
-		self.playerSpriteGroup.update()
-		self.horizontal_movement_collision()
-		
-		self.get_player_on_ground()
-		self.vertical_movement_collision()
-		self.create_landing_dust()
-
 		# enemy 
-		self.enemy_sprites.update(self.world_shift[0],self.world_shift[1])
+		self.caim_sprites.update(self.world_shift[0],self.world_shift[1])
+		self.mossSent_sprites.update(self.world_shift[0],self.world_shift[1])
+
 		self.constraint_sprites.update(self.world_shift[0],self.world_shift[1])
-		self.check_enemy_collisions(self.Player)
-		# self.enemyHit(self.Player)
-		# self.constraint_sprites.draw(self.display_surface)
 		self.enemy_collision_reverse()
-		self.enemy_sprites.draw(self.display_surface)
-		self.explosion_sprites.update(self.world_shift[0],self.world_shift[1])
-		self.explosion_sprites.draw(self.display_surface)
+		
+		self.caim_sprites.draw(self.display_surface)
+		self.mossSent_sprites.draw(self.display_surface)
 
 		# dust particles 
 		self.dust_sprite.update(self.world_shift[0],self.world_shift[1])
 		self.dust_sprite.draw(self.display_surface)
 
-		self.scroll_y()
+		# player sprites
+		self.player.update()
+		self.horizontal_movement_collision()
+		self.get_player_on_ground()
+		self.vertical_movement_collision()
+		self.create_landing_dust()
+		
 		self.scroll_x()
-		self.playerSpriteGroup.draw(self.display_surface)
+		# self.scroll_y()  
+		self.player.draw(self.display_surface)
 		self.goal.update(self.world_shift[0],self.world_shift[1])
-		self.goBack.update(self.world_shift[0],self.world_shift[1])
 		self.goal.draw(self.display_surface)
-		self.goBack.draw(self.display_surface)
 
-		#UI
+
+		#ui
 		self.UI.show_health(self.Player.hp,100)
 
-		# # camera
-		# self.camera.custom_draw(self.Player)
-		# self.camera.update()
-
-
-		

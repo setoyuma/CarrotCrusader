@@ -1,5 +1,5 @@
 from csv import reader
-from settings import tile_size
+from settings import TILE_SIZE
 from os import walk
 import pygame
 

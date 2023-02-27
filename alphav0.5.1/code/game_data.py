@@ -1,26 +1,29 @@
 level_1 = {
-		'terrain': '../levels/1/Level1_Terrain.csv',
-		'bg Pillar':'../levels/1/Level1_bgPillars.csv',
-		'enemies':'../levels/1/Level1_Enemies.csv',
-		'constraints':'../levels/1/Level1_Constraints.csv',
-		'player': '../levels/1/Level1_Player.csv',
-	}
+		'terrain': '../levels/1/level_0_terrain.csv',
+		'caim':'../levels/1/level_0_caim.csv',
+		'mossSent':'../levels/1/level_0_mossSent.csv',
+		'constraints':'../levels/1/level_0_constraints.csv',
+		'player': '../levels/1/level_0_player.csv',
+		'grass': '../levels/1/level_0_grass.csv'
+        }
 
 level_2 = {
-		'terrain': '../levels/2/Level2_Terrain.csv',
-		'bg Pillar':'../levels/2/Level2_bgPillars.csv',
-		'enemies':'../levels/2/Level2_Enemies.csv',
-		'constraints':'../levels/2/Level2_Constraints.csv',
-		'player': '../levels/2/Level2_Player.csv',
-	}
+		'terrain': '../levels/2/level_2_terrain.csv',
+		'caim':'../levels/2/level_2_caim.csv',
+		'mossSent':'../levels/2/level_2_mossSent.csv',
+		'constraints':'../levels/2/level_2_constraints.csv',
+		'player': '../levels/2/level_2_player.csv',
+		'grass': '../levels/2/level_2_grass.csv'
+        }
 
 level_3 = {
-		'terrain': '../levels/3/Level3_Terrain.csv',
-		'bg Pillar':'../levels/3/Level3_bgPillars.csv',
-		'enemies':'../levels/3/Level3_Enemies.csv',
-		'constraints':'../levels/3/Level3_Constraints.csv',
-		'player': '../levels/3/Level3_Player.csv',
-	}
+		'terrain': '../levels/3/level_3_terrain.csv',
+		'caim':'../levels/3/level_3_caim.csv',
+		'mossSent':'../levels/3/level_3_mossSent.csv',
+		'constraints':'../levels/3/level_3_constraints.csv',
+		'player': '../levels/3/level_3_player.csv',
+		'grass': '../levels/3/level_3_grass.csv'
+        }
 
 levels = {
 	1 : level_1,

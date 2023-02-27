@@ -1,11 +1,15 @@
 import pygame as pg
-
 GAMEICON = pg.image.load('../graphics/gameicon.ico')
-
-vertical_tile_number = 22
+vertical_tile_number = 16
 tile_size = 32
 
-screen_height = vertical_tile_number * tile_size
+screen_height = (vertical_tile_number*2) * tile_size
 screen_width = 1200
 
-DISPLAY = pg.Surface((440,362)) # used as the surface for rendering, which is scaled 2.75x
+# camera
+CAMERA_BORDERS = {
+	'left': 100,
+	'right': 200,
+	'top':100,
+	'bottom': 150
+}
