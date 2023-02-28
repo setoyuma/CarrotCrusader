@@ -14,7 +14,6 @@ def main():
 	level = Level(level_1)
 	BG = pg.image.load('../graphics/decoration/sky/DarkSky.png')
 
-
 	while True:
 		
 		for event in pg.event.get():
@@ -31,8 +30,6 @@ def main():
 					print('\nGame Restarting...\n')
 					main()
 
-		
-
 		screen.fill('#0f0024')
 		screen.blit(BG,(0,0))
 		level.run()
@@ -47,6 +44,5 @@ def main():
 
 		pg.display.update()
 
-		
 if __name__ == '__main__':
 	main()
