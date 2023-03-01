@@ -18,17 +18,19 @@ class Player(pg.sprite.Sprite):
         self.display_surface = surface
         # self.create_jump_particles = create_jump_particles
 
-        #player stats
+        #self stats
         self.hp = 100
 
-        #player state
+        #self state
         self.animation_speed = 0.15
         self.status = 'idle'
         self.on_left = False
         self.on_right = False
         self.hitBoxOn = False
+        self.currentX = None
+        self.wallJump = False
 
-        #player movement
+        #self movement
         self.direction = pg.math.Vector2()
         self.speed = 6
         self.gravity = 0.65
@@ -37,11 +39,12 @@ class Player(pg.sprite.Sprite):
         self.onGround = False
         self.onCeiling = False
         self.facing_right = True
-
+        self.airBorne = False
+        self.wallJumpCounter = 1
 
     def import_character_assets(self):
         character_path = '../graphics/character/'
-        self.animations = {'idle':[],'run':[],'jump':[],'fall':[],'attack':[]}
+        self.animations = {'idle':[],'run':[],'jump':[],'fall':[],'attack':[],'wallJump':[],}
         
         for animation in self.animations.keys():
             full_path = character_path + animation
@@ -51,6 +54,8 @@ class Player(pg.sprite.Sprite):
         animation = self.animations[self.status]
         self.hitBox = pg.rect.Rect(self.rect.x,self.rect.y,38,64)
         self.hitBox.center = self.rect.center
+
+
 		# loop over frame index 
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
@@ -107,6 +112,16 @@ class Player(pg.sprite.Sprite):
              if self.direction.y == 0 and self.onGround:
                  self.status = 'idle'
 
+        if self.onGround:
+            self.airBorne = False
+        else:
+            self.airBorne = True
+
+        if self.onGround == False and self.on_left:
+            self.status = 'wallJump'
+        if self.onGround == False and self.on_right:
+            self.status = 'wallJump'
+            
     def input(self):
         keys = pg.key.get_pressed()
 
@@ -121,14 +136,46 @@ class Player(pg.sprite.Sprite):
 
         if keys[pg.K_SPACE] and self.onGround:
             self.direction.y = -self.jumpHeight
+        
+        
+        '''WALL JUMP'''
+        if self.onGround == False:
+
+            if self.direction.y > -3 :
+                if keys[pg.K_SPACE] and self.wallJumpCounter != 0:
+                    if self.on_left:
+                        self.wallJump = True
+                        self.direction.y = -self.jumpHeight
+                        self.wallJumpCounter -= 1
+
+            if self.direction.y > -3 :
+                if keys[pg.K_SPACE] and self.wallJumpCounter != 0:
+                    if self.on_right:
+                        self.wallJump = True
+                        self.direction.y = -self.jumpHeight
+                        self.wallJumpCounter -= 1
+
+        if self.onGround:
+            self.wallJumpCounter = 1
 
     def horizontalCollisions(self):
         for sprite in self.collisionSprites.sprites():
             if sprite.rect.colliderect(self.rect):
                 if self.direction.x < 0:
                     self.rect.left = sprite.rect.right
+                    self.on_left = True
+                    self.currentX = self.rect.left
+                    # print(f'touching left: {self.on_left}')
+
                 if self.direction.x > 0:
                     self.rect.right = sprite.rect.left
+                    self.on_right = True
+                    self.currentX = self.rect.right
+                    # print(f'touching right: {self.on_right}')
+        if self.on_left and (self.rect.left < self.currentX or self.direction.x >= 0):
+            self.on_left = False
+        if self.on_right and (self.rect.right > self.currentX or self.direction.x <= 0):
+            self.on_right = False
 
     def verticalCollisions(self):
         for sprite in self.collisionSprites.sprites():
@@ -140,9 +187,15 @@ class Player(pg.sprite.Sprite):
                 if self.direction.y < 0:
                     self.rect.top = sprite.rect.bottom
                     self.direction.y = 0
+                    self.onCeiling = True
 
-            if self.onGround and self.direction.y != 0:
-                self.onGround = False
+            # if self.onGround and self.direction.y != 0:
+            #     self.onGround = False
+        
+        if self.onGround and self.direction.y < 0 or self.direction.y > 1:
+            self.onGround = False
+        if self.onCeiling and self.direction.y > 0.1:
+            self.onCeiling = False
     
     def applyGravity(self):
         self.direction.y += self.gravity
@@ -158,6 +211,4 @@ class Player(pg.sprite.Sprite):
         self.get_status()
         self.animate()
         # self.run_dust_animation()
-
-        # pg.draw.rect(self.display_surface,'red',self.rect)
-        # pg.draw.rect(self.display_surface,'red',self.hitBox)
+        

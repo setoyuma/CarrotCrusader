@@ -15,6 +15,8 @@ def main():
 	BG = pg.image.load('../graphics/decoration/sky/DarkSky.png')
 
 	while True:
+		screen.fill('#0f0024')
+		screen.blit(BG,(0,0))
 		
 		for event in pg.event.get():
 			if event.type == pg.QUIT:
@@ -30,11 +32,9 @@ def main():
 					print('\nGame Restarting...\n')
 					main()
 
-		screen.fill('#0f0024')
-		screen.blit(BG,(0,0))
 		level.run()
-
-		clock.tick(65)
+		clock.tick(60)
+		#show fps
 		font = pg.font.Font(None,30)
 		fpsCounter = str(int(clock.get_fps()))
 		text = font.render(f"FPS: {fpsCounter}",True,'white','black')

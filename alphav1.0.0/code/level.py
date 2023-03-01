@@ -69,6 +69,7 @@ class Level:
         self.UI.show_health(self.Player.hp,100)
 
 
+
 class CameraGroup(pg.sprite.Group):
     def __init__(self):
         super().__init__()
@@ -88,10 +89,12 @@ class CameraGroup(pg.sprite.Group):
         self.cameraRect = pg.Rect(camLeft,camTop,camWidth,camHeight)
 
     def customDraw(self,player):
+        '''CENTER CAM'''
         # #get player offset
         # self.offset.x = player.rect.centerx - self.halfWidth
         # self.offset.y = player.rect.centery - self.halfHeight
 
+        '''BOX CAM'''
         #get camera pos
         if player.rect.left < self.cameraRect.left:
             self.cameraRect.left = player.rect.left
@@ -105,7 +108,7 @@ class CameraGroup(pg.sprite.Group):
         if player.rect.bottom > self.cameraRect.bottom:
             self.cameraRect.bottom = player.rect.bottom
 
-        #camera offset
+        # camera offset
         self.offset = pg.math.Vector2(
             self.cameraRect.left - CAMERA_BORDERS['left'],
             self.cameraRect.top - CAMERA_BORDERS['top'])
