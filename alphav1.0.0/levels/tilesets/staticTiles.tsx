@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="Wonder Block Floor" tilewidth="32" tileheight="32" tilecount="54" columns="6">
+<tileset version="1.9" tiledversion="1.9.2" name="static_tiles" tilewidth="32" tileheight="32" tilecount="54" columns="6">
  <image source="staticTiles.png" width="192" height="288"/>
  <tile id="0">
   <objectgroup draworder="index" id="2">
