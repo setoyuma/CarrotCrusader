@@ -4,6 +4,7 @@ from tile import Tile,StaticTile
 from player import Player
 from support import *
 from ui import UI
+from camera import CameraGroup
 
 
 class Level:
@@ -12,23 +13,27 @@ class Level:
         #level setup
         self.displaySurface = pg.display.get_surface()
 
+        # ui
+        self.UI = UI(self.displaySurface)
+
         #sprite group setup
         self.visibleSprites = CameraGroup()  #sprites here will be drawn
         self.activeSprites = pg.sprite.Group() # sprites in here will be updated
         self.collisionSprites = pg.sprite.Group() #sprites that the player can collide with
 
-        # ui
-        self.UI = UI(self.displaySurface)
+        #terrain layout
+        terrain_layout = import_csv_layout(level_data['terrain'])
+        self.terrain_sprites = self.create_tile_group(terrain_layout,'terrain')
+        
         # player 
         player_layout = import_csv_layout(level_data['player'])
         self.player = pygame.sprite.GroupSingle()
         self.goal = pygame.sprite.GroupSingle()
         self.player_setup(player_layout)
 
-        #terrain layout
-        terrain_layout = import_csv_layout(level_data['terrain'])
-        self.terrain_sprites = self.create_tile_group(terrain_layout,'terrain')
 
+
+ 
     def create_tile_group(self,layout,type):
         sprite_group = pg.sprite.Group()
 
@@ -43,7 +48,10 @@ class Level:
                             tile_surface = terrain_tile_list[int(val)]
                             sprite = StaticTile((x,y),[self.visibleSprites,self.collisionSprites],tile_surface)
                         if type == 'constraint':
-                            sprite = Tile(TILE_SIZE,x,sprite_group.add(sprite))
+                            sprite = Tile(TILE_SIZE,)
+                        
+                        sprite_group.add(sprite)
+                        
         return sprite_group
 
     def player_setup(self,layout):
@@ -52,6 +60,8 @@ class Level:
                 x = col_index * TILE_SIZE
                 y = row_index * TILE_SIZE
                 if val == '0':
+                    # print(f"Proper Spawn x: {x}")
+                    # print(f"Proper Spawn y: {y}")
                     self.Player = Player((x,y),[self.visibleSprites,self.activeSprites],self.collisionSprites,self.displaySurface)
                     self.player.add(self.Player)
                 if val == '1':
@@ -61,62 +71,11 @@ class Level:
 
     def run(self):
         #run the game(level)
-        #player
-        self.activeSprites.update()
+        self.player.update()
         self.visibleSprites.customDraw(self.Player)
 
         #ui
         self.UI.show_health(self.Player.hp,100)
 
-
-
-class CameraGroup(pg.sprite.Group):
-    def __init__(self):
-        super().__init__()
-        self.displaySurface = pg.display.get_surface()
-        self.offset = pg.math.Vector2(100,300)
-
-        #center camera setup
-        self.halfWidth = self.displaySurface.get_size()[0]//2
-        self.halfHeight = self.displaySurface.get_size()[1]//2
-
-        #camera box
-        camLeft = CAMERA_BORDERS['left']
-        camTop = CAMERA_BORDERS['top']
-        camWidth = self.displaySurface.get_size()[0] - (camLeft + CAMERA_BORDERS['right'])
-        camHeight = self.displaySurface.get_size()[1] - (camTop + CAMERA_BORDERS['bottom'])
-
-        self.cameraRect = pg.Rect(camLeft,camTop,camWidth,camHeight)
-
-    def customDraw(self,player):
-        '''CENTER CAM'''
-        # #get player offset
-        # self.offset.x = player.rect.centerx - self.halfWidth
-        # self.offset.y = player.rect.centery - self.halfHeight
-
-        '''BOX CAM'''
-        #get camera pos
-        if player.rect.left < self.cameraRect.left:
-            self.cameraRect.left = player.rect.left
-        
-        if player.rect.right > self.cameraRect.right:
-            self.cameraRect.right = player.rect.right
-        
-        if player.rect.top < self.cameraRect.top:
-            self.cameraRect.top = player.rect.top
-        
-        if player.rect.bottom > self.cameraRect.bottom:
-            self.cameraRect.bottom = player.rect.bottom
-
-        # camera offset
-        self.offset = pg.math.Vector2(
-            self.cameraRect.left - CAMERA_BORDERS['left'],
-            self.cameraRect.top - CAMERA_BORDERS['top'])
-
-        for sprite in self.sprites():
-            offsetPos = sprite.rect.topleft - self.offset
-            self.displaySurface.blit(sprite.image,offsetPos)
-
-        # pg.draw.rect(self.displaySurface,'red',self.cameraRect)
 
     

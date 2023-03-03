@@ -1,7 +1,7 @@
 import pygame as pg, sys
 from settings import * 
 from level import Level
-from game_data import level_1
+from game_data import levels
 from pygame.locals import KEYDOWN
 
 # pg setup
@@ -11,7 +11,7 @@ def main():
 	pg.display.set_caption("CarrotCrusader")
 	pg.display.set_icon(pg.image.load("../graphics/gameIcon.ico"))
 	clock = pg.time.Clock()
-	level = Level(level_1)
+	level = Level(levels[2])
 	BG = pg.image.load('../graphics/decoration/sky/DarkSky.png')
 
 	while True:

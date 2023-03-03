@@ -11,6 +11,9 @@ class Player(pg.sprite.Sprite):
         self.image = self.animations['idle'][self.frame_index]
         self.rect = self.image.get_rect(topleft=pos)
 
+        self.spawnx = pos[0]
+        self.spawny = pos[1]
+
         # dust particles 
         self.import_dust_run_particles()
         self.dust_frame_index = 0
@@ -22,7 +25,7 @@ class Player(pg.sprite.Sprite):
         self.hp = 100
 
         #self state
-        self.animation_speed = 0.15
+        self.animation_speed = 0.18
         self.status = 'idle'
         self.on_left = False
         self.on_right = False
